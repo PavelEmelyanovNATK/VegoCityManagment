@@ -1,0 +1,48 @@
+﻿<Window x:Class="VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows.AddCategoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows" xmlns:domain="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Domain"
+        mc:Ignorable="d"
+        Title="Создание категории" 
+        Height="92" 
+        Width="294"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen" >
+
+    <Window.DataContext>
+        <domain:AddCategoryWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox
+            Grid.Row="0"
+            VerticalAlignment="Center"
+            Header="Название">
+            <TextBlock
+                Text="{Binding CategoryName}"/> 
+        </GroupBox>
+
+        <Grid
+            Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Grid.Column="0"
+                Content="Добавить"
+                Command="{Binding AddCategoryCommand}"/>
+
+            <Button
+                Grid.Column="1"
+                Content="Отмена"/>
+        </Grid>
+    </Grid>
+</Window>
