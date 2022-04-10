@@ -7,13 +7,12 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using VegoAPI.Domain;
+using VegoAPI.Domain.Models;
 using VegoCityManagment.ModuleManagment.ModuleProducts.Domain.Models;
 using VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows;
 using VegoCityManagment.ModuleProducts.Presentation.Windows;
 using VegoCityManagment.Shared.Domain;
-using VegoCityManagment.Shared.Domain.Models;
-using VegoCityManagment.Shared.Domain.VegoAPI;
-
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 {
     public class ProductsPageViewModel : ViewModelBase
@@ -22,14 +21,14 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 
         public ProductsPageViewModel()
         {
-            _vegoAPI = new VegoAPI();
+            _vegoAPI = new VegoAPI.Domain.VegoAPI();
         }
 
         private ProductLVItem[] _products;
-        private Category[] _categories;
+        private CategoryLVItem[] _categories;
 
         public ProductLVItem[] Products { get => _products; set { _products = value; PropertyWasChanged(); } }
-        public Category[] Categories { get => _categories; set { _categories = value; PropertyWasChanged(); } }
+        public CategoryLVItem[] Categories { get => _categories; set { _categories = value; PropertyWasChanged(); } }
 
         public async Task LoadProductsAsync()
         {
@@ -48,6 +47,7 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 
                 var rawProducts = await _vegoAPI.FetchProductsWithFilterAsync(filteredProductsRequest);
 
+
                 Products = rawProducts.Select(p =>
                 new ProductLVItem
                 {
@@ -59,7 +59,9 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                         new EditProductWindow(p.Id).ShowDialog();
                         await LoadProductsAsync();
                     }),
-                    ImagePath = new Uri("https://web.archive.org/web/20190502184842if_/https://2ch.hk/rf/src/3366980/15568158108720.png")
+                    ImagePath = p.ImagePath == null || p.ImagePath == ""
+                    ? new Uri("pack://application:,,,/shared/resources/defaultimage.png")
+                    : new Uri(p.ImagePath)
                 })
                 .ToArray();
             }
@@ -75,12 +77,17 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                 var rawCategories = await _vegoAPI.FetchAllCategoriesAsync();
 
                 Categories = rawCategories.Select(p =>
-                new Category
+                new CategoryLVItem
                 {
                     Id = p.Id,
                     Name = p.Name,
                     IsChecked = Categories?.FirstOrDefault(c => c.Id == p.Id)?.IsChecked ?? false,
-                    OnCheckChanged = RefreshCommand
+                    OnCheckChanged = RefreshCommand,
+                    OnDoubleClick = new Command(o =>
+                    {
+                        new EditCategoryWindow(p.Id).ShowDialog();
+                        RefreshCommand.Execute(null);
+                    })
                 })
                 .ToArray();
             }
@@ -103,21 +110,31 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
         private Command _openAddProductWindowCommand;
         public Command OpenAddProductWindowCommand
         {
-            get => _openAddProductWindowCommand ??= new Command(async o =>
+            get => _openAddProductWindowCommand ??= new Command(o =>
             {
                 new AddProductWindow().ShowDialog();
-                await LoadProductsAsync();
+                RefreshCommand.Execute(null);
             });
         }
 
         private Command _resetCategoriesCommand;
         public Command ResetCategoriesCommand
         {
-            get => _resetCategoriesCommand ??= new Command(async o =>
+            get => _resetCategoriesCommand ??= new Command(o =>
             {
                 foreach (var c in Categories)
                     c.IsChecked = false;
 
+                RefreshCommand.Execute(null);
+            });
+        }
+
+        private Command _openAddCategoryWindowCommand;
+        public Command OpenAddCategoryWindowCommand
+        {
+            get => _openAddCategoryWindowCommand ??= new Command(o =>
+            {
+                new AddCategoryWindow().ShowDialog();
                 RefreshCommand.Execute(null);
             });
         }

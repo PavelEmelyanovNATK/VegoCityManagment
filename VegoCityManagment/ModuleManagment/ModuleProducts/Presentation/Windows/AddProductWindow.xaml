@@ -27,13 +27,16 @@
         </Grid.RowDefinitions>
 
         <Image
-            Grid.Row="0"/>
+            Grid.Row="0"
+            Source="{Binding ProductImage}"
+            Stretch="UniformToFill"/>
 
         <StackPanel
             Grid.Row="1">
             <Button
                 Content="Выбрать"
-                HorizontalAlignment="Right"/>
+                HorizontalAlignment="Right"
+                Command="{Binding OpenPhotoDialogCommand}"/>
 
             <GroupBox
                 Header="Название">
@@ -59,6 +62,7 @@
                 <TextBox
                     TextWrapping="Wrap"
                     Height="100"
+                    AcceptsReturn="True"
                     Text="{Binding ProductDescription}"/>
             </GroupBox>
 
@@ -85,7 +89,8 @@
             
             <Button 
                 Grid.Column="1"
-                Content="Отмена"/>
+                Content="Отмена"
+                Command="{Binding CloseCommand}"/>
         </Grid>
     </Grid>
 </Window>

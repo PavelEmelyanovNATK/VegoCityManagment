@@ -44,12 +44,20 @@
                     Command="{Binding ResetCategoriesCommand}"/>
             </StackPanel>
 
-            <ItemsControl
-                Grid.Row="1"
-                Background="Transparent"
-                ItemsSource="{Binding Categories}"
-                Style="{StaticResource CategoriesItemsPanel}">
-            </ItemsControl>
+            <StackPanel
+                Grid.Row="1">
+                <ItemsControl
+                    Grid.Row="1"
+                    Background="Transparent"
+                    ItemsSource="{Binding Categories}"
+                    Style="{StaticResource CategoriesItemsPanel}">
+                </ItemsControl>
+
+                <Button
+                    Content="Добавить"
+                    Command="{Binding OpenAddCategoryWindowCommand}"/>
+            </StackPanel>
+            
         </Grid>
 
         <Grid
@@ -79,7 +87,7 @@
                 Grid.Row="2">
                 <Button
                     HorizontalAlignment="Left"
-                    Content="Добавить"
+                    Content="Новый товар"
                     Command="{Binding OpenAddProductWindowCommand}"/>
             </StackPanel>
         </Grid>

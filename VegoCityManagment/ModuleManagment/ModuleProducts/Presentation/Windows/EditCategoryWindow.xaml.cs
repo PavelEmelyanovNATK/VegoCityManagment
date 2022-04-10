@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VegoCityManagment.ModuleManagment.ModuleProducts.Domain;
 
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows
 {
@@ -19,9 +20,19 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows
     /// </summary>
     public partial class EditCategoryWindow : Window
     {
+        private readonly EditCategoryWindowViewModel _viewModel;
         public EditCategoryWindow()
         {
             InitializeComponent();
+
+            _viewModel = (EditCategoryWindowViewModel)DataContext;
+
+            _viewModel.CloseWindow = this.Close;
+        }
+
+        public EditCategoryWindow(int categoryId) : this()
+        {
+            _viewModel.SetCategory(categoryId);
         }
     }
 }

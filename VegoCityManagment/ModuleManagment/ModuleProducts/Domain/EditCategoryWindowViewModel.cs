@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using VegoAPI.Domain;
+using VegoAPI.Domain.Models;
 using VegoCityManagment.Shared.Domain;
-using VegoCityManagment.Shared.Domain.Models;
-using VegoCityManagment.Shared.Domain.VegoAPI;
 
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 {
-    public class EditCategoryViewModel : ViewModelBase
+    public class EditCategoryWindowViewModel : ViewModelBase
     {
         private readonly IVegoAPI _vegoApi;
 
-        public EditCategoryViewModel()
+        public EditCategoryWindowViewModel()
         {
-            _vegoApi = new VegoAPI();
+            _vegoApi = new VegoAPI.Domain.VegoAPI();
         }
 
         private string _categoryName;
@@ -36,12 +36,16 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
             {
                 try
                 {
-                    var category = new AddCategoryRequest
-                    {
-                        Name = _categoryName,
-                    };
+                    var changedFields = new Dictionary<string, string>();
 
-                    await _vegoApi.AddCategoryAsync(category);
+                    if (_oldCategory.Name != CategoryName)
+                        changedFields["Name"] = CategoryName;
+
+                    await _vegoApi.EditCategoryInfoAsync(new EditEntityWithIntIdRequest
+                    {
+                        EntityId = _oldCategory.Id,
+                        ChangedFields = changedFields
+                    });
 
                     CloseWindow?.Invoke();
                 }
@@ -52,19 +56,28 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
             });
 
         private Command _loadCategoryCommand;
-        public Command loadCategoryCommand
+        public Command LoadCategoryCommand
             => _loadCategoryCommand ??= new Command(async o =>
             {
                 try
                 {
-                    //_oldCategory = 
+                    _oldCategory = await _vegoApi.FetchCategoryAsync(_oldCategory.Id);
 
-                    CloseWindow?.Invoke();
+                    CategoryName = _oldCategory.Name;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
             });
+
+        private Command _closeCommand;
+        public Command CloseCommand
+            => _closeCommand ??= new Command(o =>
+            {
+                CloseWindow?.Invoke();
+            });
+
+
     }
 }

@@ -31,7 +31,7 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows
             _viewModel.CloseWindow = this.Close;
         }
 
-        public EditProductWindow(int productId) : this()
+        public EditProductWindow(Guid productId) : this()
         {
             _viewModel.SetProductId(productId);
         }

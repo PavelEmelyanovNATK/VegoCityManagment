@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using VegoAPI.Domain;
+using VegoAPI.Domain.Models;
 using VegoCityManagment.Shared.Domain;
-using VegoCityManagment.Shared.Domain.Models;
-using VegoCityManagment.Shared.Domain.VegoAPI;
 
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 {
@@ -16,7 +16,7 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 
         public AddCategoryWindowViewModel()
         {
-            _vegoApi = new VegoAPI();
+            _vegoApi = new VegoAPI.Domain.VegoAPI();
         }
 
         private string _categoryName;
@@ -44,6 +44,13 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                 {
                     MessageBox.Show(ex.Message);
                 }                
+            });
+
+        private Command _closeCommand;
+        public Command CloseCommand
+            => _closeCommand ??= new Command(o =>
+            {
+                CloseWindow?.Invoke();
             });
     }
 }

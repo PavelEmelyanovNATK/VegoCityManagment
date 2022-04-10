@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VegoCityManagment.Shared.Domain;
-using VegoCityManagment.Shared.Domain.Models;
 
 namespace VegoCityManagment
 {

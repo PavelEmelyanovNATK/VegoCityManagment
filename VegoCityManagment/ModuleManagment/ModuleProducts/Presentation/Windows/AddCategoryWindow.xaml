@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows" xmlns:domain="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Domain"
         mc:Ignorable="d"
         Title="Создание категории" 
-        Height="92" 
-        Width="294"
+        Height="120" 
+        Width="300"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen" >
 
@@ -24,7 +24,7 @@
             Grid.Row="0"
             VerticalAlignment="Center"
             Header="Название">
-            <TextBlock
+            <TextBox
                 Text="{Binding CategoryName}"/> 
         </GroupBox>
 
@@ -42,7 +42,8 @@
 
             <Button
                 Grid.Column="1"
-                Content="Отмена"/>
+                Content="Отмена"
+                Command="{Binding CloseCommand}"/>
         </Grid>
     </Grid>
 </Window>

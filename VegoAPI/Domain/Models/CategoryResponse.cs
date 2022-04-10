@@ -1,4 +1,4 @@
-﻿namespace VegoCityManagment.Shared.Domain.Models
+﻿namespace VegoAPI.Domain.Models
 {
     public class CategoryResponse
     {

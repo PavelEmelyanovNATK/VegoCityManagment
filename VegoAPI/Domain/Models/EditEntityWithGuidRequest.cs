@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VegoCityManagment.Shared.Domain.Models
+namespace VegoAPI.Domain.Models
 {
-    public class EditEntityRequest
+    public class EditEntityWithGuidRequest
     {
-        public int EntityId { get; set; }
+        public Guid EntityId { get; set; }
         public Dictionary<string, string> ChangedFields { get; set; }
     }
 }

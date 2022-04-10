@@ -270,10 +270,16 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            
+
                             <TextBlock 
                                 Grid.Column="0"
-                                Text="{Binding Name}"/>
+                                Text="{Binding Name}">
+                                <TextBlock.InputBindings>
+                                    <MouseBinding 
+                                        MouseAction="LeftDoubleClick"
+                                        Command="{Binding OnDoubleClick}"/>
+                                </TextBlock.InputBindings>
+                            </TextBlock>
 
                             <CheckBox 
                                 Grid.Column="1"
@@ -289,6 +295,17 @@
                             </CheckBox>
                         </Grid>
                     </Border>
+
+                    <DataTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" TargetName="Bd">
+                                <Setter.Value>#ddffffff</Setter.Value>
+                            </Setter>
+                        </MultiTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
             </Setter.Value>
         </Setter>

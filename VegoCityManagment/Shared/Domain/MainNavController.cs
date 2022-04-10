@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using VegoCityManagment.ModuleManagment.Presentation.Pages;
-using VegoCityManagment.Shared.Domain.Models;
 
 namespace VegoCityManagment.Shared.Domain
 {

@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using VegoAPI.Domain;
+using VegoAPI.Domain.Models;
 using VegoCityManagment.Shared.Domain;
-using VegoCityManagment.Shared.Domain.Models;
-using VegoCityManagment.Shared.Domain.VegoAPI;
 
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 {
@@ -16,7 +19,7 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 
         public EditProductWindowViewModel()
         {
-            _vegoApi = new VegoAPI();
+            _vegoApi = new VegoAPI.Domain.VegoAPI();
         }
 
         private ProductDetailResponse _oldProductInfo;
@@ -26,12 +29,24 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
         private CategoryResponse _selectedCategory;
         private string _productDescription = "";
         private string _productPrice;
+        private Uri _photoPath;
 
         public string ProductName { get => _productName; set { _productName = value; PropertyWasChanged(); } }
         public CategoryResponse[] ProductCategories { get => _productCategories; set { _productCategories = value; PropertyWasChanged(); } }
         public CategoryResponse SelectedCategory { get => _selectedCategory; set { _selectedCategory = value; PropertyWasChanged(); } }
         public string ProductDescription { get => _productDescription; set { _productDescription = value; PropertyWasChanged(); } }
         public string ProductPrice { get => _productPrice; set { _productPrice = value; PropertyWasChanged(); } }
+        public ImageSource ProductImage
+        {
+            get
+            {
+                var converter = new ImageSourceConverter();
+
+                return _photoPath == null
+                    ? (ImageSource)converter.ConvertFrom(new Uri("pack://application:,,,/shared/resources/defaultimage.png"))
+                    : (ImageSource)converter.ConvertFrom(_photoPath);
+            }
+        }
 
         public Action CloseWindow { get; set; }
 
@@ -47,12 +62,12 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
             }
         }
 
-        public void SetProductId(int productId)
+        public void SetProductId(Guid productId)
         {
             _oldProductInfo = new ProductDetailResponse { Id = productId };
         }
 
-        public async Task LoadProductInfo(int productId)
+        public async Task LoadProductInfo(Guid productId)
         {
             try
             {
@@ -63,6 +78,9 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                 ProductPrice = _oldProductInfo.Price.ToString();
                 SelectedCategory = ProductCategories
                     ?.FirstOrDefault(c => c.Id == _oldProductInfo.CategoryId);
+                _photoPath = !string.IsNullOrEmpty(_oldProductInfo.ImagePath) ? new Uri(_oldProductInfo.ImagePath) : null;
+                PropertyWasChanged("ProductImage");
+
             }
             catch (Exception ex)
             {
@@ -107,11 +125,24 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                         if (_oldProductInfo.CategoryId != SelectedCategory.Id)
                             changedFields["CategoryId"] = SelectedCategory.Id.ToString();
 
-                        await _vegoApi.EditProductInfoAsync(new EditEntityRequest
+                        if(changedFields.Count > 0)
+                            await _vegoApi.EditProductInfoAsync(new EditEntityWithGuidRequest
+                            {
+                                EntityId = _oldProductInfo.Id,
+                                ChangedFields = changedFields
+                            });
+
+                        if (_photoPath.AbsoluteUri != _oldProductInfo.ImagePath)
                         {
-                            EntityId = _oldProductInfo.Id,
-                            ChangedFields = changedFields
-                        });
+                            var photoId = await _vegoApi.AddProductPhotoAsync(new AddProductPhotoRequest
+                            {
+                                ProductId = _oldProductInfo.Id,
+                                Source = Convert.ToBase64String(await System.IO.File.ReadAllBytesAsync(_photoPath.LocalPath))
+                            });
+
+                            await _vegoApi.SetProductMainPhotoAsync(new SetProductMainPhotoRequest { PhotoId = photoId, ProductId = _oldProductInfo.Id });
+                        }
+                            
 
                         CloseWindow?.Invoke();
                     }
@@ -120,5 +151,27 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                         MessageBox.Show(ex.Message);
                     }
                 });
+
+        private Command _closeCommand;
+        public Command CloseCommand
+            => _closeCommand ??= new Command(o =>
+            {
+                CloseWindow?.Invoke();
+            });
+
+        private Command _openPhotoDialogCommand;
+        public Command OpenPhotoDialogCommand
+            => _openPhotoDialogCommand ??= new Command(o =>
+            {
+                var openFileDialog = new OpenFileDialog();
+
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    _photoPath = new Uri(openFileDialog.FileName);
+                    PropertyWasChanged("ProductImage");
+                }
+            });
     }
 }

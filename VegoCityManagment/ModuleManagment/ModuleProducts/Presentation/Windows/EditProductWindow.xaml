@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows" xmlns:b="http://schemas.microsoft.com/xaml/behaviors" xmlns:domain="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Domain"
         mc:Ignorable="d"
-        Title="Добавление товара" 
+        Title="Редактирование товара" 
         Height="600" 
         Width="450"
         ResizeMode="NoResize">
@@ -27,13 +27,17 @@
         </Grid.RowDefinitions>
 
         <Image
-            Grid.Row="0"/>
+            Grid.Row="0"
+            Source="{Binding ProductImage}"
+            Stretch="UniformToFill"
+            RenderOptions.BitmapScalingMode="Fant"/>
 
         <StackPanel
             Grid.Row="1">
             <Button
                 Content="Выбрать"
-                HorizontalAlignment="Right"/>
+                HorizontalAlignment="Right"
+                Command="{Binding OpenPhotoDialogCommand}"/>
 
             <GroupBox
                 Header="Название">
@@ -59,6 +63,7 @@
                 <TextBox
                     TextWrapping="Wrap"
                     Height="100"
+                    AcceptsReturn="True"
                     Text="{Binding ProductDescription}"/>
             </GroupBox>
 
@@ -85,7 +90,8 @@
 
             <Button 
                 Grid.Column="1"
-                Content="Отмена"/>
+                Content="Отмена"
+                Command="{Binding CloseCommand}"/>
         </Grid>
     </Grid>
 </Window>

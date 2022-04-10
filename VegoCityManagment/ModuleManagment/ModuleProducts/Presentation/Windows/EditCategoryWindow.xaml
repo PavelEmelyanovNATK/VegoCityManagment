@@ -3,10 +3,54 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows"
+        xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows" xmlns:domain="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Domain" xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="EditCategoryWindow" Height="450" Width="800">
+        Title="Редактирование категории" 
+        Height="120" 
+        Width="300"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen" >
+
+    <Window.DataContext>
+        <domain:EditCategoryWindowViewModel/>
+    </Window.DataContext>
+
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:InvokeCommandAction Command="{Binding LoadCategoryCommand}"/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
+    
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox
+            Grid.Row="0"
+            VerticalAlignment="Center"
+            Header="Название">
+            <TextBox
+                Text="{Binding CategoryName}"/>
+        </GroupBox>
+
+        <Grid
+            Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Grid.Column="0"
+                Content="Сохранить"
+                Command="{Binding SaveCategoryCommand}"/>
+
+            <Button
+                Grid.Column="1"
+                Content="Отмена"
+                Command="{Binding CloseCommand}"/>
+        </Grid>
     </Grid>
 </Window>
