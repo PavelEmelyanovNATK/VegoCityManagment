@@ -6,9 +6,8 @@
         xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows" xmlns:b="http://schemas.microsoft.com/xaml/behaviors" xmlns:domain="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Domain"
         mc:Ignorable="d"
         Title="Редактирование товара" 
-        Height="600" 
-        Width="450"
-        ResizeMode="NoResize">
+        MinHeight="600" 
+        MinWidth="1100">
     <Window.DataContext>
         <domain:EditProductWindowViewModel/>
     </Window.DataContext>
@@ -19,7 +18,147 @@
         </b:EventTrigger>
     </b:Interaction.Triggers>
 
-    <Grid>
+    <Grid
+        Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="500"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid
+            Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Width="540"
+                Height="360">
+                <Image
+                    x:Name="Img"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Stretch="UniformToFill"
+                    RenderOptions.BitmapScalingMode="Fant"
+                    Source="{Binding ProductImage}"/>
+
+                <Border
+                    x:Name="Cover"
+                    Background="#70000000"
+                    Visibility="Collapsed">
+
+                    <StackPanel
+                        VerticalAlignment="Center">
+                        <TextBlock
+                            Text="Выбрать..."
+                            FontSize="24"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Center"
+                            Foreground="White">
+                            <TextBlock.InputBindings>
+                                <MouseBinding
+                                    MouseAction="LeftClick"
+                                    Command="{Binding OpenPhotoDialogCommand}"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+
+                        <Decorator Height="30"/>
+
+                        <TextBlock
+                            Text="Вставить ссылку"
+                            FontSize="24"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="White">
+                            <TextBlock.InputBindings>
+                                <MouseBinding
+                                    MouseAction="LeftClick"
+                                    Command="{Binding OpenLinkDialogCommand}"/>
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseEnter">
+                        <b:SetDataStoreValueAction
+                            TargetName="Cover"
+                            PropertyName="Visibility"
+                            Value="Visible"/>
+                    </b:EventTrigger>
+
+                    <b:EventTrigger EventName="MouseLeave">
+                        <b:SetDataStoreValueAction
+                            TargetName="Cover"
+                            PropertyName="Visibility"
+                            Value="Collapsed"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </Grid>
+            
+            
+            
+        </Grid>
+
+        <StackPanel
+            Grid.Column="1">
+
+            <GroupBox
+                Header="Название"
+                HorizontalAlignment="Left"
+                Width="240">
+                <TextBox
+                    Text="{Binding ProductName}"
+                    MaxLength="20"/>
+            </GroupBox>
+
+            <GroupBox
+                Header="Категория"
+                HorizontalAlignment="Left"
+                Width="160">
+                <ComboBox
+                    ItemsSource="{Binding ProductCategories}"
+                    SelectedItem="{Binding SelectedCategory}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </GroupBox>
+
+            <GroupBox
+                Header="Стоимость"
+                HorizontalAlignment="Left"
+                Width="100">
+                <TextBox
+                    Text="{Binding ProductPrice}"/>
+            </GroupBox>
+
+            <GroupBox
+                Header="Описание">
+                <TextBox
+                    TextWrapping="Wrap"
+                    MinHeight="140"
+                    AcceptsReturn="True"
+                    Text="{Binding ProductDescription}"/>
+            </GroupBox>
+
+            <Button 
+                Grid.Column="0"
+                Content="Сохранить"
+                HorizontalAlignment="Right"
+                Width="160"
+                Command="{Binding SaveProductInfoCommand}"/>
+        </StackPanel>
+    </Grid>
+
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="250"/>
             <RowDefinition/>
@@ -30,7 +169,9 @@
             Grid.Row="0"
             Source="{Binding ProductImage}"
             Stretch="UniformToFill"
-            RenderOptions.BitmapScalingMode="Fant"/>
+            RenderOptions.BitmapScalingMode="Fant"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"/>
 
         <StackPanel
             Grid.Row="1">
@@ -93,5 +234,5 @@
                 Content="Отмена"
                 Command="{Binding CloseCommand}"/>
         </Grid>
-    </Grid>
+    </Grid>-->
 </Window>

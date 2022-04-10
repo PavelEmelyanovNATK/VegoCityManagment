@@ -19,7 +19,7 @@
         </b:EventTrigger>
     </b:Interaction.Triggers>
     
-    <Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="250"/>
             <RowDefinition/>
@@ -29,7 +29,8 @@
         <Image
             Grid.Row="0"
             Source="{Binding ProductImage}"
-            Stretch="UniformToFill"/>
+            Stretch="Fill"
+            />
 
         <StackPanel
             Grid.Row="1">
@@ -92,5 +93,5 @@
                 Content="Отмена"
                 Command="{Binding CloseCommand}"/>
         </Grid>
-    </Grid>
+    </Grid>-->
 </Window>

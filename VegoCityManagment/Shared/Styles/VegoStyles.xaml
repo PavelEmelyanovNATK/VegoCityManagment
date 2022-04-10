@@ -6,8 +6,8 @@
         <GradientStop Color="#98FFB5" Offset="0"/>
         <GradientStop Color="#5AC177" Offset="1"/>
     </LinearGradientBrush>
-    
-    
+
+
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -56,28 +56,31 @@
 
                                     <Grid>
                                         <Grid
-                                        x:Name="Bd"
-                                        Height="140"
-                                        Width="160"
-                                        Background="#fff"
-                                        Margin="6">
+                                            x:Name="Bd"
+                                            Height="164"
+                                            Width="174"
+                                            Background="#fff"
+                                            Margin="6">
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="80"/>
+                                                <RowDefinition Height="116"/>
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
 
                                             <Image
-                                            Grid.Row="0"
-                                            Source="{Binding Image}"
-                                            Margin="5"/>
+                                                Grid.Row="0"
+                                                Source="{Binding Image}"
+                                                Margin="5"
+                                                RenderOptions.BitmapScalingMode="Fant"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"/>
 
                                             <StackPanel
-                                            Grid.Row="1">
+                                                Grid.Row="1">
                                                 <TextBlock 
-                                                Text="{Binding Title}"/>
+                                                    Text="{Binding Title}"/>
                                                 <TextBlock 
-                                                Text="{Binding Price}"
-                                                TextAlignment="Right"/>
+                                                    Text="{Binding Price}"
+                                                    TextAlignment="Right"/>
                                             </StackPanel>
 
                                             <Grid.InputBindings>
@@ -166,20 +169,32 @@
                         </Border.Effect>
                         <Grid>
                             <Grid
-                                Height="140"
-                                Width="160">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="80"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+                                Height="164"
+                                Width="174">
 
-                                <Image
+                                <Border
                                     x:Name="img"
+                                    CornerRadius="20,20,0,0"
+                                    Height="116"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Stretch">
+                                    <Border.Background>
+                                        <ImageBrush
+                                            ImageSource="{Binding Image}"
+                                            RenderOptions.BitmapScalingMode="Fant"
+                                            Stretch="UniformToFill"
+                                            AlignmentX="Center"
+                                            AlignmentY="Center"/>
+                                    </Border.Background>
+                                </Border>
+
+                                <!--<Image
                                     Grid.Row="0"
                                     Source="{Binding Image}"
                                     RenderOptions.BitmapScalingMode="Fant"
                                     Stretch="UniformToFill"
-                                    StretchDirection="Both">
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
                                     <Image.OpacityMask>
                                         <VisualBrush>
                                             <VisualBrush.Visual>
@@ -192,17 +207,25 @@
                                             </VisualBrush.Visual>
                                         </VisualBrush>
                                     </Image.OpacityMask>
-                                </Image>
+                                </Image>-->
 
 
-                                <StackPanel
-                                    Grid.Row="1">
-                                    <TextBlock 
-                                        Text="{Binding Title}"/>
-                                    <TextBlock 
-                                        Text="{Binding Price}"
-                                        TextAlignment="Right"/>
-                                </StackPanel>
+                                <Border
+                                    x:Name="Cover"
+                                    CornerRadius="20"
+                                    Background="White"
+                                    Height="68"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom">
+                                    <StackPanel
+                                        Margin="16, 10">
+                                        <TextBlock 
+                                            Text="{Binding Title}"/>
+                                        <TextBlock 
+                                            Text="{Binding Price}"/>
+                                    </StackPanel>
+                                </Border>
+                                
                             </Grid>
                         </Grid>
 
@@ -218,7 +241,7 @@
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True"/>
                             </MultiTrigger.Conditions>
-                            <Setter Property="Background" TargetName="Bd">
+                            <Setter Property="Background" TargetName="Cover">
                                 <Setter.Value>#E0FFE8</Setter.Value>
                             </Setter>
                         </MultiTrigger>
@@ -310,5 +333,41 @@
             </Setter.Value>
         </Setter>
     </Style>
-   
+
+    <Style x:Key="ImageMiniGaleryItem" TargetType="ItemsControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ItemsControl">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        Background="{TemplateBinding Background}">
+                        <ScrollViewer 
+                            CanContentScroll="True" 
+                            Padding="{TemplateBinding Padding}"
+                            VerticalScrollBarVisibility="Auto"
+                            Focusable="False">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

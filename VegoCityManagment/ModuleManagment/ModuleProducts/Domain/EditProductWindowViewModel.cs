@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using VegoAPI.Domain;
 using VegoAPI.Domain.Models;
+using VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows;
 using VegoCityManagment.Shared.Domain;
 
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
@@ -137,7 +138,9 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                             var photoId = await _vegoApi.AddProductPhotoAsync(new AddProductPhotoRequest
                             {
                                 ProductId = _oldProductInfo.Id,
-                                Source = Convert.ToBase64String(await System.IO.File.ReadAllBytesAsync(_photoPath.LocalPath))
+                                Source = _photoPath.IsFile 
+                                ? Convert.ToBase64String(await System.IO.File.ReadAllBytesAsync(_photoPath.LocalPath))
+                                : _photoPath.AbsoluteUri
                             });
 
                             await _vegoApi.SetProductMainPhotoAsync(new SetProductMainPhotoRequest { PhotoId = photoId, ProductId = _oldProductInfo.Id });
@@ -172,6 +175,27 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                     _photoPath = new Uri(openFileDialog.FileName);
                     PropertyWasChanged("ProductImage");
                 }
+            });
+
+        private Command _openLinkDialogCommand;
+        public Command OpenLinkDialogCommand
+            => _openLinkDialogCommand ??= new Command(o =>
+            {
+                var link = new TextFieldWindow().ShowDialog();
+
+                if (link is null or "")
+                    return;
+
+                try
+                {
+                    _photoPath = new Uri(link);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                PropertyWasChanged("ProductImage");
             });
     }
 }
