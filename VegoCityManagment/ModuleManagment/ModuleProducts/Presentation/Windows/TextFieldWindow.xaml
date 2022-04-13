@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="Вставьте ссылку" Height="102" Width="544"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Exo 2"
+        FontSize="14">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -25,6 +27,9 @@
         <Button
             Grid.Row="1"
             Content="Ок"
+            HorizontalAlignment="Center"
+            Padding="50,3"
+            Style="{StaticResource GreenButton12px}"
             Click="Ok_Click"/>
     </Grid>
 </Window>

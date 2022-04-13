@@ -6,7 +6,9 @@
       xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.Presentation.Pages" xmlns:domain="clr-namespace:VegoCityManagment.ModuleManagment.Domain"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ManagmentPage">
+      Title="ManagmentPage"
+      FontFamily="Exo 2"
+      FontSize="14">
     <Page.DataContext>
         <domain:ManagmentPageViewModel/>
     </Page.DataContext>
@@ -55,7 +57,8 @@
                     TextAlignment="Right"/>
 
                 <Button
-                    Content="Выйти"/>
+                    Content="Выйти"
+                    Style="{StaticResource RedButton12px}"/>
             </StackPanel>
         </Grid>
 

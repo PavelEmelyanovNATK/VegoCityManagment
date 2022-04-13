@@ -24,23 +24,24 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows
             InitializeComponent();
         }
 
-        public new string ShowDialog()
+        public new string? ShowDialog()
         {
-            base.ShowDialog();
+            if (base.ShowDialog() == true)
+                return tbLink.Text;
 
-            return tbLink.Text;
+            return null;
         }
 
-        public string ShowDialog(string title)
+        public string? ShowDialog(string title)
         {
             this.Title = title;
-            base.ShowDialog();
-
-            return tbLink.Text;
+            
+            return this.ShowDialog();
         }
 
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = true;
             this.Close();
         }
     }

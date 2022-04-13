@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +11,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using VegoAPI.Domain;
 using VegoAPI.Domain.Models;
+using VegoCityManagment.ModuleManagment.ModuleProducts.Domain.Models;
 using VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows;
 using VegoCityManagment.Shared.Domain;
+using VegoCityManagment.Shared.Utils;
 
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 {
@@ -30,24 +34,21 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
         private CategoryResponse _selectedCategory;
         private string _productDescription = "";
         private string _productPrice;
-        private Uri _photoPath;
+        private ProductPhotoItem _productMainPhoto;
+        private ProductPhotoItem _selectedPhoto;
+        private ObservableCollection<ProductPhotoItem> _allProductPhotos;
+        private Visibility _saveingIndicatorVisibility = Visibility.Collapsed;
+        private bool _productIsActive;
 
         public string ProductName { get => _productName; set { _productName = value; PropertyWasChanged(); } }
         public CategoryResponse[] ProductCategories { get => _productCategories; set { _productCategories = value; PropertyWasChanged(); } }
         public CategoryResponse SelectedCategory { get => _selectedCategory; set { _selectedCategory = value; PropertyWasChanged(); } }
         public string ProductDescription { get => _productDescription; set { _productDescription = value; PropertyWasChanged(); } }
         public string ProductPrice { get => _productPrice; set { _productPrice = value; PropertyWasChanged(); } }
-        public ImageSource ProductImage
-        {
-            get
-            {
-                var converter = new ImageSourceConverter();
-
-                return _photoPath == null
-                    ? (ImageSource)converter.ConvertFrom(new Uri("pack://application:,,,/shared/resources/defaultimage.png"))
-                    : (ImageSource)converter.ConvertFrom(_photoPath);
-            }
-        }
+        public ProductPhotoItem SelectedPhoto { get => _selectedPhoto is null ? new ProductPhotoItem() : _selectedPhoto; set { _selectedPhoto = value; PropertyWasChanged(); } }
+        public ObservableCollection<ProductPhotoItem> AllProductPhotos { get => _allProductPhotos; set { _allProductPhotos = value; PropertyWasChanged(); } }
+        public Visibility SaveingIndicatorVisibility { get => _saveingIndicatorVisibility; set { _saveingIndicatorVisibility = value; PropertyWasChanged();} }
+        public bool ProductIsActive { get => _productIsActive; set { _productIsActive = value; PropertyWasChanged(); } }
 
         public Action CloseWindow { get; set; }
 
@@ -75,13 +76,78 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                 _oldProductInfo = await _vegoApi.FetchProductDetailsAsync(productId);
 
                 ProductName = _oldProductInfo.Title;
+                ProductIsActive = _oldProductInfo.IsActive;
                 ProductDescription = _oldProductInfo.Description;
                 ProductPrice = _oldProductInfo.Price.ToString();
                 SelectedCategory = ProductCategories
                     ?.FirstOrDefault(c => c.Id == _oldProductInfo.CategoryId);
-                _photoPath = !string.IsNullOrEmpty(_oldProductInfo.ImagePath) ? new Uri(_oldProductInfo.ImagePath) : null;
-                PropertyWasChanged("ProductImage");
+                AllProductPhotos = _oldProductInfo.Photos.Select(p =>
+                {
+                    var photoItem = new ProductPhotoItem
+                    {
+                        PhotoId = p.PhotoId,
+                        LowResPath = string.IsNullOrEmpty(p.LowResPath)
+                        ? null
+                        : new Uri(p.LowResPath),
+                        HighResPath = string.IsNullOrEmpty(p.HighResPath)
+                        ? null
+                        : new Uri(p.HighResPath)
+                    };
 
+                    photoItem.FirstButtonCommand = new Command(_ =>
+                    {
+                        bool wasSelected = SelectedPhoto == photoItem;
+                        bool wasMain = _productMainPhoto == photoItem;
+                        
+                        AllProductPhotos.Remove(photoItem);
+
+                        if(AllProductPhotos.Count > 0)
+                        {
+                            if(wasMain)
+                                _productMainPhoto = AllProductPhotos.First();
+
+                            if(wasSelected)
+                                SelectedPhoto = AllProductPhotos.First();
+                        }
+                        else
+                        {
+                            _productMainPhoto = null;
+                            SelectedPhoto = null;
+                        }
+                    });
+
+                    photoItem.SecondButtonCommand = new Command(
+                        _ =>
+                        {
+                            _productMainPhoto = photoItem;
+                        },
+                        _ => _productMainPhoto?.PhotoId is not null
+                        ? _productMainPhoto.PhotoId != photoItem.PhotoId
+                        : true);
+
+                    photoItem.OnPressCommand = new Command(
+                        _ =>
+                        {
+                            SelectedPhoto = photoItem;
+                        },
+                        _ => SelectedPhoto?.PhotoId is not null
+                        ? SelectedPhoto.PhotoId != photoItem.PhotoId
+                        : true);
+
+                    return photoItem;
+                })
+            .ToObservableCollection();
+
+                if (_oldProductInfo.MainPhotoId is not null)
+                {
+                    var photo = AllProductPhotos.FirstOrDefault(p => p.PhotoId == _oldProductInfo.MainPhotoId);
+
+                    if (photo is not null && photo.HighResPath is not null)
+                    {
+                        SelectedPhoto = photo;
+                        _productMainPhoto = photo;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -106,12 +172,15 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                 });
 
         private Command _saveProductInfoCommand;
+        private bool _saveButtonEnabled = true;
         public Command SaveProductInfoCommand
             => _saveProductInfoCommand ??= new Command(
                 async o =>
                 {
                     try
                     {
+                        SaveingIndicatorVisibility = Visibility.Visible;
+
                         var changedFields = new Dictionary<string, string>();
 
                         if (_oldProductInfo.Title != ProductName)
@@ -126,34 +195,82 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                         if (_oldProductInfo.CategoryId != SelectedCategory.Id)
                             changedFields["CategoryId"] = SelectedCategory.Id.ToString();
 
-                        if(changedFields.Count > 0)
+                        if(_oldProductInfo.IsActive != ProductIsActive)
+                            changedFields["IsActive"] = ProductIsActive.ToString();
+
+                        if (changedFields.Count > 0)
                             await _vegoApi.EditProductInfoAsync(new EditEntityWithGuidRequest
                             {
                                 EntityId = _oldProductInfo.Id,
                                 ChangedFields = changedFields
                             });
 
-                        if (_photoPath.AbsoluteUri != _oldProductInfo.ImagePath)
-                        {
-                            var photoId = await _vegoApi.AddProductPhotoAsync(new AddProductPhotoRequest
+                        var deletedPhotos = _oldProductInfo.Photos
+                        .Select(photo => photo.PhotoId)
+                        .Except(_allProductPhotos
+                        .Select(photo => photo.PhotoId));
+
+                        var addedPhotos = _allProductPhotos
+                        .Where(photo => !_oldProductInfo.Photos
+                        .Any(oph => photo.PhotoId == oph.PhotoId))
+                        .ToList();
+
+                        if(_productMainPhoto is not null && _productMainPhoto.PhotoId != _oldProductInfo.MainPhotoId)
+                            if (addedPhotos.Contains(_productMainPhoto))
                             {
-                                ProductId = _oldProductInfo.Id,
-                                Source = _photoPath.IsFile 
-                                ? Convert.ToBase64String(await System.IO.File.ReadAllBytesAsync(_photoPath.LocalPath))
-                                : _photoPath.AbsoluteUri
-                            });
+                                addedPhotos.Remove(_productMainPhoto);
 
-                            await _vegoApi.SetProductMainPhotoAsync(new SetProductMainPhotoRequest { PhotoId = photoId, ProductId = _oldProductInfo.Id });
-                        }
-                            
+                                var photoId = await _vegoApi.AddProductPhotoAsync(
+                                    new UploadProductPhotoRequest
+                                    {
+                                        ProductId = _oldProductInfo.Id,
+                                        Source = _productMainPhoto.HighResPath.IsFile
+                                        ? Convert.ToBase64String(await File.ReadAllBytesAsync(_productMainPhoto.HighResPath.LocalPath))
+                                        : _productMainPhoto.HighResPath.AbsoluteUri
+                                    });
 
-                        CloseWindow?.Invoke();
+                                await _vegoApi.SetProductMainPhotoAsync(
+                                    new SetProductMainPhotoRequest
+                                    {
+                                        PhotoId = photoId,
+                                        ProductId = _oldProductInfo.Id,
+                                    });
+                            }
+                            else
+                            {
+                                await _vegoApi.SetProductMainPhotoAsync(
+                                    new SetProductMainPhotoRequest
+                                    {
+                                        PhotoId = _productMainPhoto.PhotoId,
+                                        ProductId = _oldProductInfo.Id,
+                                    });
+                            }
+
+                        foreach(var photo in addedPhotos)
+                            await _vegoApi.AddProductPhotoAsync(
+                                new UploadProductPhotoRequest
+                                {
+                                    ProductId = _oldProductInfo.Id,
+                                    Source = photo.HighResPath.IsFile
+                                    ? Convert.ToBase64String(await File.ReadAllBytesAsync(photo.HighResPath.LocalPath))
+                                    : photo.HighResPath.AbsoluteUri
+                                });
+
+                        foreach (var photo in deletedPhotos)
+                            await _vegoApi.DeleteProductPhotoAsync(photo);
+
+                        MessageBox.Show("Успешно!");
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
                     }
-                });
+                    finally
+                    {
+                        SaveingIndicatorVisibility = Visibility.Collapsed;
+                    }
+                },
+                _ => _saveButtonEnabled);
 
         private Command _closeCommand;
         public Command CloseCommand
@@ -172,8 +289,63 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    _photoPath = new Uri(openFileDialog.FileName);
-                    PropertyWasChanged("ProductImage");
+                    var path = new Uri(openFileDialog.FileName);
+                    var photoItem = new ProductPhotoItem
+                    {
+                        PhotoId = Guid.NewGuid(),
+                        LowResPath = path,
+                        HighResPath = path
+                    };
+
+                    photoItem.FirstButtonCommand = new Command(_ =>
+                    {
+                        bool wasSelected = _selectedPhoto == photoItem;
+                        bool wasMain = _productMainPhoto == photoItem;
+
+                        AllProductPhotos.Remove(photoItem);
+
+                        if (AllProductPhotos.Count > 0)
+                        {
+                            if (wasMain)
+                                _productMainPhoto = AllProductPhotos.First();
+
+                            if (wasSelected)
+                                SelectedPhoto = AllProductPhotos.First();
+                        }
+                        else
+                        {
+                            _productMainPhoto = null;
+                            SelectedPhoto = null;
+                        }
+                    });
+
+                    photoItem.SecondButtonCommand = new Command(
+                            _ =>
+                            {
+                                _productMainPhoto = photoItem;
+                            },
+                            _ => _productMainPhoto?.PhotoId is not null
+                            ? _productMainPhoto.PhotoId != photoItem.PhotoId
+                            : true);
+
+                    photoItem.OnPressCommand = new Command(
+                        _ =>
+                        {
+                            SelectedPhoto = photoItem;
+                        },
+                        _ => SelectedPhoto?.PhotoId is not null
+                        ? SelectedPhoto.PhotoId != photoItem.PhotoId
+                        : true);
+
+                    AllProductPhotos.Add(photoItem);
+
+                    if (_productMainPhoto is null)
+                        _productMainPhoto = photoItem;
+
+                    if (SelectedPhoto.PhotoId == Guid.Empty)
+                    {
+                        SelectedPhoto = photoItem;
+                    }
                 }
             });
 
@@ -188,14 +360,68 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 
                 try
                 {
-                    _photoPath = new Uri(link);
+                    var photoItem = new ProductPhotoItem
+                    {
+                        PhotoId = Guid.NewGuid(),
+                        LowResPath = new Uri(link),
+                        HighResPath = new Uri(link)
+                    };
+
+                    photoItem.FirstButtonCommand = new Command(_ =>
+                    {
+                        bool wasSelected = SelectedPhoto == photoItem;
+                        bool wasMain = _productMainPhoto == photoItem;
+
+                        AllProductPhotos.Remove(photoItem);
+                        if (AllProductPhotos.Count > 0)
+                        {
+                            if (wasMain)
+                                _productMainPhoto = AllProductPhotos.First();
+
+                            if (wasSelected)
+                                SelectedPhoto = AllProductPhotos.First();
+                        }
+                        else
+                        {
+                            _productMainPhoto = null;
+                            SelectedPhoto = null;
+                        }
+                    });
+
+                    photoItem.SecondButtonCommand = new Command(
+                            _ =>
+                            {
+                                _productMainPhoto = photoItem;
+                            },
+                            _ => _productMainPhoto?.PhotoId is not null
+                            ? _productMainPhoto.PhotoId != photoItem.PhotoId
+                            : true);
+
+                    photoItem.OnPressCommand = new Command(
+                        _ =>
+                        {
+                            SelectedPhoto = photoItem;
+                        },
+                        _ => SelectedPhoto?.PhotoId is not null
+                        ? SelectedPhoto.PhotoId != photoItem.PhotoId
+                        : true);
+
+                    AllProductPhotos.Add(photoItem);
+
+                    if (_productMainPhoto is null)
+                        _productMainPhoto = photoItem;
+
+                    if (SelectedPhoto.PhotoId == Guid.Empty)
+                    {
+                        SelectedPhoto = photoItem;
+                    }
+
+
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-
-                PropertyWasChanged("ProductImage");
             });
     }
 }

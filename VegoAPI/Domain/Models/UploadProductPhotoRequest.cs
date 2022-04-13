@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VegoAPI.Domain.Models
 {
-    public class AddProductPhotoRequest
+    public class UploadProductPhotoRequest
     {
         public Guid ProductId { get; set; }
         /// <summary>

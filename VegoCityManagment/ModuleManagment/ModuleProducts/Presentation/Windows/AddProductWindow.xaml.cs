@@ -29,5 +29,10 @@ namespace VegoCityManagment.ModuleProducts.Presentation.Windows
 
             _viewModel.CloseWindow = this.Close;
         }
+
+        private void Description_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _viewModel.ProductDescription = ((TextBox)sender).Text;
+        }
     }
 }

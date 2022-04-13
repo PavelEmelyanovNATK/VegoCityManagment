@@ -18,8 +18,8 @@ namespace VegoAPI.Domain
         Task AddCategoryAsync(AddCategoryRequest addCategoryRequest);
         Task EditProductInfoAsync(EditEntityWithGuidRequest editProductRequest);
         Task EditCategoryInfoAsync(EditEntityWithIntIdRequest editCategoryRequest);
-        Task<Guid> AddProductPhotoAsync(AddProductPhotoRequest addProductPhotoRequest);
+        Task<Guid> AddProductPhotoAsync(UploadProductPhotoRequest addProductPhotoRequest);
         Task SetProductMainPhotoAsync(SetProductMainPhotoRequest setProductMainPhotoRequest);
-        Task DeleteProductPhotoAsync();
+        Task DeleteProductPhotoAsync(Guid photoId);
     }
 }

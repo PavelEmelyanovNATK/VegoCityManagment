@@ -15,6 +15,7 @@ namespace VegoAPI.Domain.Models
         public string Description { get; set; }
         public double Price { get; set; }
         public bool IsActive { get; set; }
-        public string ImagePath { get; set; }
+        public PhotoResponse[] Photos { get; set; }
+        public Guid? MainPhotoId { get; set; }
     }
 }

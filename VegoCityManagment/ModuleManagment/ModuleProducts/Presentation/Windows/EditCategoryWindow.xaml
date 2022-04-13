@@ -9,7 +9,9 @@
         Height="120" 
         Width="300"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen" >
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Exo 2"
+        FontSize="14">
 
     <Window.DataContext>
         <domain:EditCategoryWindowViewModel/>
@@ -45,11 +47,15 @@
             <Button
                 Grid.Column="0"
                 Content="Сохранить"
+                Style="{StaticResource GreenButton12px}"
+                Margin="10, 0"
                 Command="{Binding SaveCategoryCommand}"/>
 
             <Button
                 Grid.Column="1"
                 Content="Отмена"
+                Style="{StaticResource RedButton12px}"
+                Margin="10, 0"
                 Command="{Binding CloseCommand}"/>
         </Grid>
     </Grid>

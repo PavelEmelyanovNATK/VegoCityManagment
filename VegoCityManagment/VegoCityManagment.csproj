@@ -8,6 +8,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Shared\Fonts\Exo2-Black.ttf" />
+    <None Remove="Shared\Fonts\Exo2-BlackItalic.ttf" />
+    <None Remove="Shared\Fonts\Exo2-Bold.ttf" />
+    <None Remove="Shared\Fonts\Exo2-BoldItalic.ttf" />
+    <None Remove="Shared\Fonts\Exo2-ExtraBold.ttf" />
+    <None Remove="Shared\Fonts\Exo2-ExtraBoldItalic.ttf" />
+    <None Remove="Shared\Fonts\Exo2-ExtraLight.ttf" />
+    <None Remove="Shared\Fonts\Exo2-ExtraLightItalic.ttf" />
+    <None Remove="Shared\Fonts\Exo2-Italic.ttf" />
+    <None Remove="Shared\Fonts\Exo2-Light.ttf" />
+    <None Remove="Shared\Fonts\Exo2-LightItalic.ttf" />
+    <None Remove="Shared\Fonts\Exo2-Medium.ttf" />
+    <None Remove="Shared\Fonts\Exo2-MediumItalic.ttf" />
+    <None Remove="Shared\Fonts\Exo2-Regular.ttf" />
+    <None Remove="Shared\Fonts\Exo2-SemiBold.ttf" />
+    <None Remove="Shared\Fonts\Exo2-SemiBoldItalic.ttf" />
+    <None Remove="Shared\Fonts\Exo2-Thin.ttf" />
+    <None Remove="Shared\Fonts\Exo2-ThinItalic.ttf" />
     <None Remove="Shared\Resources\DefaultImage.png" />
   </ItemGroup>
 
@@ -33,14 +51,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ModuleProducts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\VegoAPI\VegoAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Shared\Fonts\Exo2-Black.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-BlackItalic.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-Bold.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-BoldItalic.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-ExtraBold.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-ExtraBoldItalic.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-ExtraLight.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-ExtraLightItalic.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-Italic.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-Light.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-LightItalic.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-Medium.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-MediumItalic.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-Regular.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-SemiBold.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-SemiBoldItalic.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-Thin.ttf" />
+    <Resource Include="Shared\Fonts\Exo2-ThinItalic.ttf" />
     <Resource Include="Shared\Resources\DefaultImage.png" />
   </ItemGroup>
 

@@ -43,7 +43,7 @@ namespace VegoAPI.Domain
                 .ProductId;
         }
 
-        public async Task<Guid> AddProductPhotoAsync(AddProductPhotoRequest addProductPhotoRequest)
+        public async Task<Guid> AddProductPhotoAsync(UploadProductPhotoRequest addProductPhotoRequest)
         {
             var form = new MultipartFormDataContent();
 
@@ -69,7 +69,9 @@ namespace VegoAPI.Domain
             var addPhotoRequest = new
             {
                 ProductId = addProductPhotoRequest.ProductId,
-                LowImagePath = imageResponseObject.image.file.resource.chain.medium,
+                LowImagePath = imageResponseObject.image.file.resource.chain.medium is null 
+                ? imageResponseObject.image.file.resource.chain.thumb
+                : imageResponseObject.image.file.resource.chain.medium,
                 HighImagePath = imageResponseObject.image.file.resource.chain.image
             };
 
@@ -80,10 +82,8 @@ namespace VegoAPI.Domain
             return idResponseObject.PhotoId;
         }
 
-        public Task DeleteProductPhotoAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task DeleteProductPhotoAsync(Guid photoId)
+            => await _httpClient.DeleteAsync($"managment/delete-product-photo/{photoId}");
 
         public async Task EditCategoryInfoAsync(EditEntityWithIntIdRequest editCategoryRequest)
             => await _httpClient.PutAsJsonAsync("managment/edit-category", editCategoryRequest);
@@ -116,38 +116,9 @@ namespace VegoAPI.Domain
             return JsonSerializer.Deserialize<ProductShortResponse[]>(jsonString, options);
         }
 
-
-
-
-
-
-
-
-        public async Task LoadProductMainPhotoAsync(LoadProductPhotoRequest loadProductPhotoRequest)
-        {
-            var form = new MultipartFormDataContent();
-
-            
-
-            var productId = new StringContent($"{loadProductPhotoRequest.ProductId}");
-            //productId.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            //{
-            //    Name = "ProductId",
-            //};
-            //
-            var photoFile = new ByteArrayContent(loadProductPhotoRequest.PhotoBytes);
-            //photoFile.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            //{
-            //    Name = "ImageFile",
-            //};
-
-            form.Add(productId, "ProductId");
-            form.Add(photoFile, "ImageFile", "name");
-
-            await _httpClient.PostAsync("managment/load-product-main-photo", form);
-        }
-
         public async Task SetProductMainPhotoAsync(SetProductMainPhotoRequest setProductMainPhotoRequest)
-            => _httpClient.PostAsJsonAsync("managment/set-product-main-photo", setProductMainPhotoRequest);
+            => await _httpClient.PostAsJsonAsync("managment/set-product-main-photo", setProductMainPhotoRequest);
+
+        
     }
 }

@@ -61,7 +61,8 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                     }),
                     ImagePath = p.ImagePath == null || p.ImagePath == ""
                     ? new Uri("pack://application:,,,/shared/resources/defaultimage.png")
-                    : new Uri(p.ImagePath)
+                    : new Uri(p.ImagePath),
+                    IsActive = p.IsActive
                 })
                 .ToArray();
             }

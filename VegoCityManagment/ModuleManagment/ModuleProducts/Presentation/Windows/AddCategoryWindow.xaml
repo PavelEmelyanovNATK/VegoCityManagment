@@ -9,7 +9,9 @@
         Height="120" 
         Width="300"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen" >
+        WindowStartupLocation="CenterScreen" 
+        FontFamily="Exo 2"
+        FontSize="14">
 
     <Window.DataContext>
         <domain:AddCategoryWindowViewModel/>
@@ -38,11 +40,15 @@
             <Button
                 Grid.Column="0"
                 Content="Добавить"
+                Margin="10, 0"
+                Style="{StaticResource GreenButton12px}"
                 Command="{Binding AddCategoryCommand}"/>
 
             <Button
                 Grid.Column="1"
                 Content="Отмена"
+                Margin="10, 0"
+                Style="{StaticResource RedButton12px}"
                 Command="{Binding CloseCommand}"/>
         </Grid>
     </Grid>
