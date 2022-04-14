@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using MVVMBaseByNH.Domain;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,11 +19,12 @@ using VegoCityManagment.Shared.Utils;
 
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 {
-    public class EditProductWindowViewModel : ViewModelBase
+    public class EditProductViewModel : ViewModelBase
     {
         private readonly IVegoAPI _vegoApi;
+        private ProductsNavController _productsNavController;
 
-        public EditProductWindowViewModel()
+        public EditProductViewModel()
         {
             _vegoApi = new VegoAPI.Domain.VegoAPI();
         }
@@ -50,8 +52,6 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
         public Visibility SaveingIndicatorVisibility { get => _saveingIndicatorVisibility; set { _saveingIndicatorVisibility = value; PropertyWasChanged();} }
         public bool ProductIsActive { get => _productIsActive; set { _productIsActive = value; PropertyWasChanged(); } }
 
-        public Action CloseWindow { get; set; }
-
         public async Task LoadCategories()
         {
             try
@@ -64,9 +64,10 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
             }
         }
 
-        public void SetProductId(Guid productId)
+        public void Setup(Guid productId, ProductsNavController navController)
         {
             _oldProductInfo = new ProductDetailResponse { Id = productId };
+            _productsNavController = navController;
         }
 
         public async Task LoadProductInfo(Guid productId)
@@ -272,11 +273,11 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                 },
                 _ => _saveButtonEnabled);
 
-        private Command _closeCommand;
-        public Command CloseCommand
-            => _closeCommand ??= new Command(o =>
+        private Command _backCommand;
+        public Command BackCommand
+            => _backCommand ??= new Command(o =>
             {
-                CloseWindow?.Invoke();
+                _productsNavController.PopBackStack();
             });
 
         private Command _openPhotoDialogCommand;

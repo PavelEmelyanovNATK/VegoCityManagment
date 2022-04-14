@@ -18,27 +18,21 @@ using VegoCityManagment.ModuleManagment.ModuleProducts.Domain;
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для ProductsPage.xaml
+    /// Логика взаимодействия для ProductsListScreen.xaml
     /// </summary>
-    public partial class ProductsPage : Page
+    public partial class ProductsListScreen : Page
     {
-        private readonly ProductsPageViewModel _viewModel;
-        public ProductsPage()
+        private readonly ProductsListViewModel _viewModel;
+        public ProductsListScreen()
         {
             InitializeComponent();
 
-            _viewModel = (ProductsPageViewModel)DataContext;
+            _viewModel = (ProductsListViewModel)DataContext;
         }
 
-        public ProductsPage(DrawerController drawerController) : this()
+        public ProductsListScreen(ProductsNavController navController, DrawerController drawerController) : this()
         {
-            _viewModel.Setup(drawerController);
-        }
-
-        private void ProductsPageContainer_Navigated(object sender, NavigationEventArgs e)
-        {
-            while(ProductsPageContainer.CanGoBack)
-                ProductsPageContainer.RemoveBackEntry();
+            _viewModel.Setup(drawerController, navController);
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VegoCityManagment.ModuleManagment.Domain;
 
 namespace VegoCityManagment.ModuleManagment.Presentation.Pages
 {
@@ -20,9 +21,18 @@ namespace VegoCityManagment.ModuleManagment.Presentation.Pages
     /// </summary>
     public partial class ManagmentPage : Page
     {
+        private readonly ManagmentPageViewModel _viewModel;
         public ManagmentPage()
         {
             InitializeComponent();
+
+            _viewModel = (ManagmentPageViewModel)DataContext;;
+        }
+
+        private void ManagmentFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            while(ManagmentFrame.CanGoBack)
+                ManagmentFrame.RemoveBackEntry();
         }
     }
 }

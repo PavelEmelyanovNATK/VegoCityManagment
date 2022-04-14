@@ -27,6 +27,9 @@
     <None Remove="Shared\Fonts\Exo2-Thin.ttf" />
     <None Remove="Shared\Fonts\Exo2-ThinItalic.ttf" />
     <None Remove="Shared\Resources\DefaultImage.png" />
+    <None Remove="Shared\Resources\VegoIcon.ico" />
+    <None Remove="Shared\Resources\VegoIcon.png" />
+    <None Remove="Shared\Resources\VegoIcon.svg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MVVMBaseByNH\MVVMBaseByNH.csproj" />
     <ProjectReference Include="..\VegoAPI\VegoAPI.csproj" />
   </ItemGroup>
 
@@ -74,6 +78,9 @@
     <Resource Include="Shared\Fonts\Exo2-Thin.ttf" />
     <Resource Include="Shared\Fonts\Exo2-ThinItalic.ttf" />
     <Resource Include="Shared\Resources\DefaultImage.png" />
+    <Resource Include="Shared\Resources\VegoIcon.png" />
+    <Resource Include="Shared\Resources\VegoIcon.svg" />
+    <Resource Include="Shared\Resources\VegoIcon.ico" />
   </ItemGroup>
 
 </Project>

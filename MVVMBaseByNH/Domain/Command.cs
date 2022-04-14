@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace VegoCityManagment.Shared.Domain
+namespace MVVMBaseByNH.Domain
 {
     public class Command : ICommand
     {

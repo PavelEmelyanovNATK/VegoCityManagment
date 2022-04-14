@@ -12,26 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using VegoCityManagment.Shared.Domain;
 
-namespace VegoCityManagment
+namespace VegoCityManagment.ModuleManagment.ModuleOrders.Presentation.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для OrdersPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class OrdersPage : Page
     {
-        private MainNavController _mainNavController;
-
-        public MainWindow()
+        public OrdersPage()
         {
             InitializeComponent();
-        }
-
-        private void MainFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            while(MainFrame.CanGoBack)
-                MainFrame.RemoveBackEntry();
         }
     }
 }

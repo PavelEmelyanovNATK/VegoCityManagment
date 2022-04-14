@@ -10,30 +10,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VegoCityManagment.ModuleManagment.ModuleProducts.Domain;
 
-namespace VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows
+namespace VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для EditProductWindow.xaml
+    /// Логика взаимодействия для AddProductScreen.xaml
     /// </summary>
-    public partial class EditProductWindow : Window
+    public partial class AddProductScreen : Page
     {
-        private readonly EditProductWindowViewModel _viewModel;
-
-        public EditProductWindow()
+        private readonly AddProductViewModel _viewModel;
+        public AddProductScreen()
         {
             InitializeComponent();
 
-            _viewModel = (EditProductWindowViewModel)DataContext;
-
-            _viewModel.CloseWindow = this.Close;
+            _viewModel = (AddProductViewModel)DataContext;
         }
 
-        public EditProductWindow(Guid productId) : this()
+        public AddProductScreen(ProductsNavController navController) : this()
         {
-            _viewModel.SetProductId(productId);
+            _viewModel.Setup(navController);
         }
     }
 }

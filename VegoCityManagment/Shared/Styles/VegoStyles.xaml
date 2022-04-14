@@ -1,6 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel" xmlns:b="http://schemas.microsoft.com/xaml/behaviors">
     
+    <!--Icons-->
+
+    <BitmapImage x:Key="VegoLogo" UriSource="pack://application:,,,/Shared\Resources\VegoIcon.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+
     <!--Colors-->
     
     <Brush x:Key="MainBackground">#FFF</Brush>
@@ -13,9 +17,11 @@
     
     <!--Fonts-->
 
+    <FontFamily x:Key="Exo2">pack://application:,,,/Shared\Fonts\#Exo 2</FontFamily>
 
     <!--Styles-->
     <Style x:Key="GreenButton14px" TargetType="{x:Type Button}">
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="#5AC177"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -49,6 +55,7 @@
     </Style>
 
     <Style x:Key="GreenButton12px" TargetType="{x:Type Button}">
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="#5AC177"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -82,6 +89,7 @@
     </Style>
 
     <Style x:Key="WhiteButton12px" TargetType="{x:Type Button}">
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="#4DAB68"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -115,6 +123,7 @@
     </Style>
 
     <Style x:Key="RedButton12px" TargetType="{x:Type Button}">
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="#FFC5C5"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -140,6 +149,41 @@
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Background" TargetName="border" Value="#D6C4C4"/>
                             <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#EBEBEB"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DrawerMenuItem" TargetType="{x:Type Button}">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="10, 8"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="14">
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDefaulted" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="#99ffffff"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="#ddffffff"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="#fff"/>
+                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#000"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -295,19 +339,20 @@
             <Setter.Value>
                 <DataTemplate>
                     <Border
+                        Cursor="Hand"
                         x:Name="Bd"
                         CornerRadius="20"
                         Background="#fff"
                         Margin="6"
                         Opacity="{Binding CardOpacity}">
-                        <Border.Effect>
-                            <DropShadowEffect 
-                                BlurRadius="3" 
-                                RenderingBias="Quality"
-                                ShadowDepth="0"
-                                Opacity="0.25"/>
-                        </Border.Effect>
                         <Grid>
+                            <Rectangle
+                                Fill="black"
+                                RadiusX="20"
+                                RadiusY="20"
+                                Margin="-0.8"
+                                Opacity="0.2">
+                            </Rectangle>
                             <Grid
                                 Height="164"
                                 Width="174">
@@ -446,6 +491,7 @@
             <Setter.Value>
                 <DataTemplate>
                     <Border
+                        Cursor="Hand"
                         x:Name="Bd"
                         CornerRadius="12"
                         Background="#75ffffff"
@@ -529,6 +575,7 @@
             <Setter.Value>
                 <DataTemplate>
                     <Grid
+                        Cursor="Hand"
                         x:Name="Img"
                         Margin="10">
                         <Border
@@ -665,6 +712,7 @@
             <Setter.Value>
                 <DataTemplate>
                     <Grid
+                        Cursor="Hand"
                         x:Name="Img"
                         Margin="10">
                         <Border
@@ -770,6 +818,44 @@
         </Setter>
     </Style>
 
-
+    <Style x:Key="BurgerMenu" TargetType="Button">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="#5AC177"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Width" Value="35"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true" CornerRadius="100">
+                        <StackPanel
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center">
+                            <Border Margin="8, 1.5" Background="White" CornerRadius="2" Height="4"/>
+                            <Border Margin="8, 1.5" Background="White" CornerRadius="2" Height="4"/>
+                            <Border Margin="8, 1.5" Background="White" CornerRadius="2" Height="4"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDefaulted" Value="true">
+                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="#6AE38C"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" TargetName="border" Value="#4CAA67"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="border" Value="#9EBBA7"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>        
 
 </ResourceDictionary>

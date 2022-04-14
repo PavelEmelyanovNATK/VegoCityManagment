@@ -5,7 +5,9 @@ VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VegoCityManagment", "VegoCityManagment\VegoCityManagment.csproj", "{8BE6EEA6-C00F-45C0-BFCE-275AC941C71E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VegoAPI", "VegoAPI\VegoAPI.csproj", "{1746682E-7AF4-4B23-9103-92A1E7DA8F55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VegoAPI", "VegoAPI\VegoAPI.csproj", "{1746682E-7AF4-4B23-9103-92A1E7DA8F55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVVMBaseByNH", "MVVMBaseByNH\MVVMBaseByNH.csproj", "{EE240255-6679-4565-AD0A-939F4A7117A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{1746682E-7AF4-4B23-9103-92A1E7DA8F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1746682E-7AF4-4B23-9103-92A1E7DA8F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1746682E-7AF4-4B23-9103-92A1E7DA8F55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE240255-6679-4565-AD0A-939F4A7117A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE240255-6679-4565-AD0A-939F4A7117A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE240255-6679-4565-AD0A-939F4A7117A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE240255-6679-4565-AD0A-939F4A7117A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows" xmlns:domain="clr-namespace:VegoCityManagment.ModuleManagment.ModuleProducts.Domain"
         mc:Ignorable="d"
         Title="Создание категории" 
-        Height="120" 
+        Height="140" 
         Width="300"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen" 
@@ -16,7 +16,8 @@
     <Window.DataContext>
         <domain:AddCategoryWindowViewModel/>
     </Window.DataContext>
-    <Grid>
+    <Grid
+        Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="auto"/>
@@ -25,7 +26,8 @@
         <GroupBox
             Grid.Row="0"
             VerticalAlignment="Center"
-            Header="Название">
+            Header="Название"
+            Margin="0,0,0,10">
             <TextBox
                 Text="{Binding CategoryName}"/> 
         </GroupBox>

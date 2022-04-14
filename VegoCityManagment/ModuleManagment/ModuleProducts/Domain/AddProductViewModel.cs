@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using MVVMBaseByNH.Domain;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,11 +17,12 @@ using VegoCityManagment.Shared.Domain;
 
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 {
-    public class AddProductWindowViewModel : ViewModelBase
+    public class AddProductViewModel : ViewModelBase
     {
         private readonly IVegoAPI _vegoApi;
+        private ProductsNavController _productsNavController;
 
-        public AddProductWindowViewModel()
+        public AddProductViewModel()
         {
             _vegoApi = new VegoAPI.Domain.VegoAPI();
         }
@@ -46,7 +48,10 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
         public Visibility SaveingIndicatorVisibility { get => _saveingIndicatorVisibility; set { _saveingIndicatorVisibility = value; PropertyWasChanged(); } }
         public ProductPhotoItem[] AllPhotos { get => _allPhotos; set { _allPhotos = value; PropertyWasChanged(); } }
 
-        public Action CloseWindow { get; set; }
+        public void Setup(ProductsNavController navController)
+        {
+            _productsNavController = navController;
+        }
 
         public async Task LoadCategories()
         {
@@ -138,7 +143,7 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                                     });
 
                         MessageBox.Show("Успешно!");
-                        CloseWindow?.Invoke();
+                        _productsNavController.PopBackStack();
                     }
                     catch (Exception ex)
                     {
@@ -150,11 +155,11 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                     }
                 });
 
-        private Command _closeCommand;
-        public Command CloseCommand
-            => _closeCommand ??= new Command(o =>
+        private Command _backCommand;
+        public Command BackCommand
+            => _backCommand ??= new Command(o =>
             {
-                CloseWindow?.Invoke();
+                _productsNavController.PopBackStack();
             });
 
         private Command _openPhotoDialogCommand;
@@ -226,9 +231,9 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                     if (_productMainPhoto is null)
                         _productMainPhoto = photoItem;
 
-                    if (SelectedPhoto.PhotoId == Guid.Empty)
+                    if (SelectedPhoto is null || SelectedPhoto.PhotoId == Guid.Empty)
                     {
-                        _selectedPhoto = photoItem;
+                        SelectedPhoto = photoItem;
                     }
                 }
             });
@@ -310,7 +315,7 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
 
                     MessageBox.Show("Успешно!");
 
-                    CloseWindow?.Invoke();
+                    _productsNavController.PopBackStack();
                 }
                 catch (Exception ex)
                 {

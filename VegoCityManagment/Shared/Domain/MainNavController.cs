@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MVVMBaseByNH.Domain;
+using MVVMBaseByNH.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +16,27 @@ namespace VegoCityManagment.Shared.Domain
 
         public void NavigateToRegistrationScreen() { }
 
-        public void NavigateToManagmentScreen()
-            => CurrentPage = new ManagmentPage();
+        public void NavigateToManagmentScreen(NavOptions options = NavOptions.GetFromBackStack)
+        {
+            if (options == NavOptions.None)
+                CurrentPage = new ManagmentPage();
+            else
+            {
+                var page = BackStack.LastOrDefault(p => p is ManagmentPage);
+
+                if(page is null)
+                {
+                    page = new ManagmentPage();
+                    BackStack.Add(page);
+                }
+                else
+                {
+                    BackStack.Remove(page);
+                    BackStack.Add(page);
+                }
+
+                CurrentPage = BackStack.Last();
+            }
+        }
     }
 }
