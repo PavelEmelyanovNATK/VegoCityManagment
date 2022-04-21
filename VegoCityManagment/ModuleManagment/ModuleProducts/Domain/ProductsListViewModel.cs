@@ -10,6 +10,7 @@ using VegoAPI.Domain.Models;
 using VegoCityManagment.ModuleManagment.Domain;
 using VegoCityManagment.ModuleManagment.ModuleProducts.Domain.Models;
 using VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows;
+using VegoCityManagment.Shared.Components;
 using VegoCityManagment.Shared.Domain;
 
 namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
@@ -63,7 +64,7 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                     Id = p.Id,
                     Title = p.Title,
                     Price = p.Price,
-                    OnDoubleClickCommand = new Command(async o =>
+                    OnDoubleClickCommand = new Command(o =>
                     {
                         _productsNavController.NavigateToEditProductScreen(p.Id, _productsNavController);
                     }),
@@ -76,7 +77,7 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                VegoMessageDialogWindow.ShowDialog(ex.Message);
             }
         }
         public async Task LoadCategoriesAsync()
@@ -86,23 +87,32 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                 var rawCategories = await _vegoAPI.FetchAllCategoriesAsync();
 
                 Categories = rawCategories.Select(p =>
-                new CategoryLVItem
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    IsChecked = Categories?.FirstOrDefault(c => c.Id == p.Id)?.IsChecked ?? false,
-                    OnCheckChanged = RefreshCommand,
-                    OnDoubleClick = new Command(o =>
+                    var categoryItem = new CategoryLVItem
                     {
-                        new EditCategoryWindow(p.Id).ShowDialog();
+                        Id = p.Id,
+                        Name = p.Name,
+                        IsChecked = Categories?.FirstOrDefault(c => c.Id == p.Id)?.IsChecked ?? false,
+                        OnEditClick = new Command(o =>
+                        {
+                            new EditCategoryWindow(p.Id).ShowDialog();
+                            RefreshCommand.Execute(null);
+                        })
+                    };
+
+                    categoryItem.OnClick = new Command(_ =>
+                    {
+                        categoryItem.IsChecked = !categoryItem.IsChecked;
                         RefreshCommand.Execute(null);
-                    })
+                    });
+
+                    return categoryItem;
                 })
                 .ToArray();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                VegoMessageDialogWindow.ShowDialog(ex.Message);
             }
         }
 

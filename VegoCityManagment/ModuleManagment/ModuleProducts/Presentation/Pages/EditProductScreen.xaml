@@ -30,6 +30,14 @@
         <Grid
             Grid.Row="0">
 
+            <Button
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="10"
+                Content="Удалить"
+                Style="{StaticResource RedButton12px}"
+                Command="{Binding DeleteCommand}"/>
+
             <StackPanel
                 Orientation="Vertical"
                 Margin="10,10,0,0">
@@ -146,15 +154,18 @@
                         <StackPanel
                             Orientation="Horizontal">
                             <GroupBox
+                                Style="{StaticResource TransparentGroupBox}"
                                 Header="Название"
                                 HorizontalAlignment="Left"
                                 Width="240">
                                 <TextBox
+                                    Style="{StaticResource RoundedTextBox}"
                                     Text="{Binding ProductName}"
                                     MaxLength="20"/>
                             </GroupBox>
 
                             <GroupBox
+                                Style="{StaticResource TransparentGroupBox}"
                             Header="Категория"
                             HorizontalAlignment="Left"
                             Width="160">
@@ -170,18 +181,36 @@
                             </GroupBox>
                         </StackPanel>
 
-
-                        <GroupBox
-                            Header="Стоимость"
-                            HorizontalAlignment="Left"
-                            Width="100">
-                            <TextBox
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <GroupBox
+                                Style="{StaticResource TransparentGroupBox}"
+                                Header="Стоимость"
+                                HorizontalAlignment="Left"
+                                Width="100">
+                                <TextBox
+                                    Style="{StaticResource RoundedTextBox}"
                                 Text="{Binding ProductPrice}"/>
-                        </GroupBox>
+                            </GroupBox>
+
+                            <GroupBox
+                                Header="Доступность"
+                                HorizontalAlignment="Left">
+                                <StackPanel
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                         Text="Товар доступен: "/>
+                                    <CheckBox
+                                        IsChecked="{Binding ProductIsActive}"/>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
 
                         <GroupBox
+                            Style="{StaticResource TransparentGroupBox}"
                             Header="Описание">
                             <TextBox
+                                Style="{StaticResource RoundedTextBox}"
                                 TextWrapping="Wrap"
                                 MinHeight="140"
                                 AcceptsReturn="True"

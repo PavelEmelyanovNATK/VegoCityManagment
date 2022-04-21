@@ -146,15 +146,18 @@
                         <StackPanel
                             Orientation="Horizontal">
                             <GroupBox
+                                Style="{StaticResource TransparentGroupBox}"
                                 Header="Название"
                                 HorizontalAlignment="Left"
                                 Width="240">
                                 <TextBox
+                                    Style="{StaticResource RoundedTextBox}"
                                     Text="{Binding ProductName}"
                                     MaxLength="20"/>
                             </GroupBox>
                             
                             <GroupBox
+                                Style="{StaticResource TransparentGroupBox}"
                             Header="Категория"
                             HorizontalAlignment="Left"
                             Width="160">
@@ -172,16 +175,20 @@
 
 
                         <GroupBox
+                            Style="{StaticResource TransparentGroupBox}"
                             Header="Стоимость"
                             HorizontalAlignment="Left"
                             Width="100">
                             <TextBox
+                                Style="{StaticResource RoundedTextBox}"
                                 Text="{Binding ProductPrice}"/>
                         </GroupBox>
 
                         <GroupBox
+                            Style="{StaticResource TransparentGroupBox}"
                             Header="Описание">
                             <TextBox
+                                Style="{StaticResource RoundedTextBox}"
                                 TextWrapping="Wrap"
                                 MinHeight="140"
                                 AcceptsReturn="True"

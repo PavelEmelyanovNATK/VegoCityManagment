@@ -14,7 +14,8 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain.Models
         public int Id { get; set; } 
         public string Name { get; set; }
         public bool IsChecked { get => _isChecked; set { _isChecked = value; PropertyWasChanged(); } }
-        public Command OnCheckChanged { get; set; }
-        public Command OnDoubleClick { get; set; }
+        public Command OnClick { get; set; }
+        public Command OnEditClick { get; set; }
+        public Command OnDeleteClick { get; set; }
     }
 }

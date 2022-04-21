@@ -21,11 +21,23 @@ namespace VegoCityManagment
     /// </summary>
     public partial class MainWindow : Window
     {
-        private MainNavController _mainNavController;
+        private readonly MainWindowViewModel _viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            _viewModel = (MainWindowViewModel)DataContext;
+
+            _viewModel.CloseAction = this.Close;
+            _viewModel.MinimizeAction = () => this.WindowState = WindowState.Minimized;
+            _viewModel.MaximizeAction = () =>
+            {
+                if(this.WindowState == WindowState.Maximized)
+                    this.WindowState = WindowState.Normal;
+                else
+                    this.WindowState = WindowState.Maximized;
+            }; 
         }
 
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)

@@ -132,15 +132,20 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                             }
 
                         if (addedPhotos is not null)
-                            foreach (var photo in addedPhotos)
-                                await _vegoApi.AddProductPhotoAsync(
+                        {
+                            var loadPhotosTask = addedPhotos.Select(async photo =>
+                                _vegoApi.AddProductPhotoAsync(
                                     new UploadProductPhotoRequest
                                     {
                                         ProductId = productId,
                                         Source = photo.HighResPath.IsFile
                                         ? Convert.ToBase64String(await File.ReadAllBytesAsync(photo.HighResPath.LocalPath))
                                         : photo.HighResPath.AbsoluteUri
-                                    });
+                                    }));
+
+                            await Task.WhenAll(loadPhotosTask);
+                        }
+                            
 
                         MessageBox.Show("Успешно!");
                         _productsNavController.PopBackStack();

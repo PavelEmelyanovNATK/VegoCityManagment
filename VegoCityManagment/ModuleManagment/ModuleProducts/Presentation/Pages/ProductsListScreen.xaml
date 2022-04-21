@@ -29,8 +29,14 @@
 
         <Grid
             Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="230"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
 
             <StackPanel
+                Grid.Column="0"
                 Orientation="Horizontal"
                 Margin="10,10,0,0">
                 <Button
@@ -45,12 +51,19 @@
                     VerticalAlignment="Center"/>
             </StackPanel>
 
+            <TextBox
+                Grid.Column="1"
+                VerticalAlignment="Bottom"
+                Style="{StaticResource RoundedTextBox18px}"
+                FontSize="18"
+                />
 
             <Button
+                Grid.Column="2"
                 Content="Обновить"
                 Margin="0,0,10,0"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Command="{Binding RefreshCommand}"
                 Style="{StaticResource GreenButton12px}"/>
         </Grid>
@@ -71,6 +84,7 @@
                 CornerRadius="20">
 
                 <Grid
+                    x:Name="CtContainer"
                 Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -97,10 +111,11 @@
                     <StackPanel
                     Grid.Row="1">
                         <ItemsControl
-                        Grid.Row="1"
-                        Background="Transparent"
-                        ItemsSource="{Binding Categories}"
-                        Style="{StaticResource CategoriesItemsPanel}"/>
+                            Grid.Row="1"
+                            Background="Transparent"
+                            ItemsSource="{Binding Categories}"
+                            MaxWidth="{Binding ElementName=CtContainer, Path=ActualWidth}"
+                            Style="{StaticResource CategoriesItemsPanel}"/>
 
                         <Button
                             Margin="0, 5"

@@ -70,7 +70,8 @@
             NavigationUIVisibility="Hidden"
             Content="{Binding ManagmentNavController.CurrentPage}"
             Focusable="False"
-            Navigated="ManagmentFrame_Navigated"/>
+            Navigated="ManagmentFrame_Navigated"
+            Padding="5"/>
 
         <Border
             Grid.Row="1"

@@ -33,7 +33,7 @@ namespace VegoCityManagment.ModuleManagment.Domain
                 _ =>
                 {
                     ManagmentNavController.NavigateToProductsPage(DrawerController);
-                    //DrawerController.CloseDrawer();
+                    DrawerController.CloseDrawer();
                 },
                 _ => ManagmentNavController.CurrentPage is not ProductsPage);
 
@@ -42,8 +42,8 @@ namespace VegoCityManagment.ModuleManagment.Domain
             => _goToOrdersCommand ??= new Command(
                 _ =>
                 {
-                    ManagmentNavController.NavigateToOrdersPage();
-                    //DrawerController.CloseDrawer();
+                    ManagmentNavController.NavigateToOrdersPage(DrawerController);
+                    DrawerController.CloseDrawer();
                 },
                 _ => ManagmentNavController.CurrentPage is not OrdersPage);
     }

@@ -14,6 +14,7 @@ using VegoAPI.Domain;
 using VegoAPI.Domain.Models;
 using VegoCityManagment.ModuleManagment.ModuleProducts.Domain.Models;
 using VegoCityManagment.ModuleManagment.ModuleProducts.Presentation.Windows;
+using VegoCityManagment.Shared.Components;
 using VegoCityManagment.Shared.Domain;
 using VegoCityManagment.Shared.Utils;
 
@@ -95,45 +96,11 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                         : new Uri(p.HighResPath)
                     };
 
-                    photoItem.FirstButtonCommand = new Command(_ =>
-                    {
-                        bool wasSelected = SelectedPhoto == photoItem;
-                        bool wasMain = _productMainPhoto == photoItem;
-                        
-                        AllProductPhotos.Remove(photoItem);
+                    photoItem.FirstButtonCommand = BuildPhotoItemFirstButtonCommand(photoItem);
 
-                        if(AllProductPhotos.Count > 0)
-                        {
-                            if(wasMain)
-                                _productMainPhoto = AllProductPhotos.First();
+                    photoItem.SecondButtonCommand = BuildPhotoItemSecondButtonCommand(photoItem);
 
-                            if(wasSelected)
-                                SelectedPhoto = AllProductPhotos.First();
-                        }
-                        else
-                        {
-                            _productMainPhoto = null;
-                            SelectedPhoto = null;
-                        }
-                    });
-
-                    photoItem.SecondButtonCommand = new Command(
-                        _ =>
-                        {
-                            _productMainPhoto = photoItem;
-                        },
-                        _ => _productMainPhoto?.PhotoId is not null
-                        ? _productMainPhoto.PhotoId != photoItem.PhotoId
-                        : true);
-
-                    photoItem.OnPressCommand = new Command(
-                        _ =>
-                        {
-                            SelectedPhoto = photoItem;
-                        },
-                        _ => SelectedPhoto?.PhotoId is not null
-                        ? SelectedPhoto.PhotoId != photoItem.PhotoId
-                        : true);
+                    photoItem.OnPressCommand = BuildOnPressPhotoItemCommand(photoItem);
 
                     return photoItem;
                 })
@@ -247,20 +214,26 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                                     });
                             }
 
-                        foreach(var photo in addedPhotos)
-                            await _vegoApi.AddProductPhotoAsync(
+                        var loadPhotosTasks = addedPhotos.Select(async photo =>
+                            _vegoApi.AddProductPhotoAsync(
                                 new UploadProductPhotoRequest
                                 {
                                     ProductId = _oldProductInfo.Id,
                                     Source = photo.HighResPath.IsFile
                                     ? Convert.ToBase64String(await File.ReadAllBytesAsync(photo.HighResPath.LocalPath))
                                     : photo.HighResPath.AbsoluteUri
-                                });
+                                }));
 
-                        foreach (var photo in deletedPhotos)
-                            await _vegoApi.DeleteProductPhotoAsync(photo);
+                        var deletePhotosTasks = deletedPhotos.Select(photo =>
+                            _vegoApi.DeleteProductPhotoAsync(photo));
 
-                        MessageBox.Show("Успешно!");
+                        if(loadPhotosTasks.Count() > 0)
+                            await Task.WhenAll(loadPhotosTasks);
+
+                        if(deletePhotosTasks.Count() > 0)
+                            await Task.WhenAll(deletePhotosTasks);
+
+                        VegoMessageDialogWindow.ShowDialog("Успешно!");
                     }
                     catch (Exception ex)
                     {
@@ -298,45 +271,11 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                         HighResPath = path
                     };
 
-                    photoItem.FirstButtonCommand = new Command(_ =>
-                    {
-                        bool wasSelected = _selectedPhoto == photoItem;
-                        bool wasMain = _productMainPhoto == photoItem;
+                    photoItem.FirstButtonCommand = BuildPhotoItemFirstButtonCommand(photoItem);
 
-                        AllProductPhotos.Remove(photoItem);
+                    photoItem.SecondButtonCommand = BuildPhotoItemSecondButtonCommand(photoItem);
 
-                        if (AllProductPhotos.Count > 0)
-                        {
-                            if (wasMain)
-                                _productMainPhoto = AllProductPhotos.First();
-
-                            if (wasSelected)
-                                SelectedPhoto = AllProductPhotos.First();
-                        }
-                        else
-                        {
-                            _productMainPhoto = null;
-                            SelectedPhoto = null;
-                        }
-                    });
-
-                    photoItem.SecondButtonCommand = new Command(
-                            _ =>
-                            {
-                                _productMainPhoto = photoItem;
-                            },
-                            _ => _productMainPhoto?.PhotoId is not null
-                            ? _productMainPhoto.PhotoId != photoItem.PhotoId
-                            : true);
-
-                    photoItem.OnPressCommand = new Command(
-                        _ =>
-                        {
-                            SelectedPhoto = photoItem;
-                        },
-                        _ => SelectedPhoto?.PhotoId is not null
-                        ? SelectedPhoto.PhotoId != photoItem.PhotoId
-                        : true);
+                    photoItem.OnPressCommand = BuildOnPressPhotoItemCommand(photoItem);
 
                     AllProductPhotos.Add(photoItem);
 
@@ -368,44 +307,11 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                         HighResPath = new Uri(link)
                     };
 
-                    photoItem.FirstButtonCommand = new Command(_ =>
-                    {
-                        bool wasSelected = SelectedPhoto == photoItem;
-                        bool wasMain = _productMainPhoto == photoItem;
+                    photoItem.FirstButtonCommand = BuildPhotoItemFirstButtonCommand(photoItem);
 
-                        AllProductPhotos.Remove(photoItem);
-                        if (AllProductPhotos.Count > 0)
-                        {
-                            if (wasMain)
-                                _productMainPhoto = AllProductPhotos.First();
+                    photoItem.SecondButtonCommand = BuildPhotoItemSecondButtonCommand(photoItem);
 
-                            if (wasSelected)
-                                SelectedPhoto = AllProductPhotos.First();
-                        }
-                        else
-                        {
-                            _productMainPhoto = null;
-                            SelectedPhoto = null;
-                        }
-                    });
-
-                    photoItem.SecondButtonCommand = new Command(
-                            _ =>
-                            {
-                                _productMainPhoto = photoItem;
-                            },
-                            _ => _productMainPhoto?.PhotoId is not null
-                            ? _productMainPhoto.PhotoId != photoItem.PhotoId
-                            : true);
-
-                    photoItem.OnPressCommand = new Command(
-                        _ =>
-                        {
-                            SelectedPhoto = photoItem;
-                        },
-                        _ => SelectedPhoto?.PhotoId is not null
-                        ? SelectedPhoto.PhotoId != photoItem.PhotoId
-                        : true);
+                    photoItem.OnPressCommand = BuildOnPressPhotoItemCommand(photoItem);
 
                     AllProductPhotos.Add(photoItem);
 
@@ -424,5 +330,63 @@ namespace VegoCityManagment.ModuleManagment.ModuleProducts.Domain
                     MessageBox.Show(ex.Message);
                 }
             });
+
+        private Command BuildPhotoItemFirstButtonCommand(ProductPhotoItem photoItem)
+        {
+            return new Command(
+                _ =>
+                {
+                    bool wasSelected = _selectedPhoto == photoItem;
+                    bool wasMain = _productMainPhoto == photoItem;
+
+                    AllProductPhotos.Remove(photoItem);
+
+                    if (AllProductPhotos.Count > 0)
+                    {
+                        if (wasMain)
+                            _productMainPhoto = AllProductPhotos.First();
+
+                        if (wasSelected)
+                            SelectedPhoto = AllProductPhotos.First();
+                    }
+                    else
+                    {
+                        _productMainPhoto = null;
+                        SelectedPhoto = null;
+                    }
+                });
+        }
+
+        private Command BuildPhotoItemSecondButtonCommand(ProductPhotoItem photoItem)
+        {
+            return new Command(
+                _ =>
+                {
+                    _productMainPhoto = photoItem;
+                },
+                _ => _productMainPhoto?.PhotoId is not null
+                ? _productMainPhoto.PhotoId != photoItem.PhotoId
+                : true);
+        }
+
+        private Command BuildOnPressPhotoItemCommand(ProductPhotoItem photoItem)
+        {
+            return new Command(
+                _ =>
+                {
+                    SelectedPhoto = photoItem;
+                },
+                _ => SelectedPhoto?.PhotoId is not null
+                ? SelectedPhoto.PhotoId != photoItem.PhotoId
+                : true);
+        }
+
+        private Command _deleteCommand;
+        public Command DeleteCommand
+            => _deleteCommand ??= new Command(
+                _ =>
+                {
+                    VegoMessageDialogWindow.ShowDialog("Вы уверены что хотите удалить товар?", "Внимание!");
+                });
     }
 }

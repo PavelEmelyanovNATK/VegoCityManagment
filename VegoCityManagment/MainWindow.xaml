@@ -5,15 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VegoCityManagment" xmlns:domain="clr-namespace:VegoCityManagment.Shared.Domain"
         mc:Ignorable="d"
-        Title="VegoCity - Для Менеджера" MinHeight="450" MinWidth="800"
-        WindowState="Maximized"
-        Icon="pack://application:,,,/Shared\Resources\VegoIcon.ico">
+        Title="" MinHeight="450" MinWidth="800"
+        WindowState="Normal"
+        Icon="pack://application:,,,/Shared\Resources\VegoIcon.ico"
+        Style="{StaticResource VegoWindow}">
     <Window.DataContext>
-        <domain:MainWindowViewModel/>
+        <local:MainWindowViewModel/>
     </Window.DataContext>
-    
     <Grid>
         <Frame
+            Grid.Row="1"
             x:Name="MainFrame"
             Navigated="MainFrame_Navigated"
             NavigationUIVisibility="Hidden"

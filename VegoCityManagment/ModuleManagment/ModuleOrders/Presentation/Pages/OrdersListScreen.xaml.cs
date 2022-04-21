@@ -18,27 +18,21 @@ using VegoCityManagment.ModuleManagment.ModuleOrders.Domain;
 namespace VegoCityManagment.ModuleManagment.ModuleOrders.Presentation.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для OrdersPage.xaml
+    /// Логика взаимодействия для OrdersListScreen.xaml
     /// </summary>
-    public partial class OrdersPage : Page
+    public partial class OrdersListScreen : Page
     {
-        private readonly OrdersPageViewModel _viewModel;
-        public OrdersPage()
+        private readonly OrdersListViewModel _viewModel;
+        public OrdersListScreen()
         {
             InitializeComponent();
 
-            _viewModel = (OrdersPageViewModel)DataContext;
+            _viewModel = (OrdersListViewModel)DataContext;
         }
 
-        public OrdersPage(DrawerController drawerController) : this()
+        public OrdersListScreen(DrawerController drawerController, OrdersNavController navController) : this()
         {
-            _viewModel.Setup(drawerController);
-        }
-
-        private void OrdersFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            while(OrdersFrame.CanGoBack)
-                OrdersFrame.RemoveBackEntry();
+            _viewModel.Setup(drawerController, navController);
         }
     }
 }

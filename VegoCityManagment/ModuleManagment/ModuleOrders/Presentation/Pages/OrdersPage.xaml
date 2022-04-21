@@ -3,12 +3,22 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.ModuleOrders.Presentation.Pages"
+      xmlns:local="clr-namespace:VegoCityManagment.ModuleManagment.ModuleOrders.Presentation.Pages" xmlns:domain="clr-namespace:VegoCityManagment.ModuleManagment.ModuleOrders.Domain"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="OrdersPage">
-
+      Title="OrdersPage"
+      FontFamily="{StaticResource Exo2}"
+      FontSize="14">
+    <Page.DataContext>
+        <domain:OrdersPageViewModel/>
+    </Page.DataContext>
+    
     <Grid>
-        
+        <Frame
+            x:Name="OrdersFrame"
+            JournalOwnership="OwnsJournal"
+            NavigationUIVisibility="Hidden"
+            Navigated="OrdersFrame_Navigated"
+            Content="{Binding OrdersNavController.CurrentPage}"/>
     </Grid>
 </Page>

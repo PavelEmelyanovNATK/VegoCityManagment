@@ -26,7 +26,11 @@
     <None Remove="Shared\Fonts\Exo2-SemiBoldItalic.ttf" />
     <None Remove="Shared\Fonts\Exo2-Thin.ttf" />
     <None Remove="Shared\Fonts\Exo2-ThinItalic.ttf" />
+    <None Remove="Shared\Resources\close_vego_button.png" />
     <None Remove="Shared\Resources\DefaultImage.png" />
+    <None Remove="Shared\Resources\maximize_vego_button.png" />
+    <None Remove="Shared\Resources\minimize_vego_button.png" />
+    <None Remove="Shared\Resources\normalize_vego_button.png" />
     <None Remove="Shared\Resources\VegoIcon.ico" />
     <None Remove="Shared\Resources\VegoIcon.png" />
     <None Remove="Shared\Resources\VegoIcon.svg" />
@@ -77,10 +81,18 @@
     <Resource Include="Shared\Fonts\Exo2-SemiBoldItalic.ttf" />
     <Resource Include="Shared\Fonts\Exo2-Thin.ttf" />
     <Resource Include="Shared\Fonts\Exo2-ThinItalic.ttf" />
+    <Resource Include="Shared\Resources\close_vego_button.png" />
     <Resource Include="Shared\Resources\DefaultImage.png" />
+    <Resource Include="Shared\Resources\maximize_vego_button.png" />
+    <Resource Include="Shared\Resources\minimize_vego_button.png" />
+    <Resource Include="Shared\Resources\normalize_vego_button.png" />
     <Resource Include="Shared\Resources\VegoIcon.png" />
     <Resource Include="Shared\Resources\VegoIcon.svg" />
     <Resource Include="Shared\Resources\VegoIcon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Shared\Components\VegoMessageDialog\Domain\" />
   </ItemGroup>
 
 </Project>

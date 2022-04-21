@@ -13,7 +13,10 @@ namespace VegoCityManagment.ModuleManagment.Domain
 {
     public class ManagmentNavController : NavController
     {
-        public void NavigateToProductsPage(DrawerController drawerController = null, NavOptions options = NavOptions.GetFromBackStack)
+        public void NavigateToProductsPage(
+            DrawerController drawerController = null, 
+            NavOptions options = NavOptions.GetFromBackStack
+            )
         {
             if (options == NavOptions.None)
                 CurrentPage = new ProductsPage(drawerController);
@@ -36,17 +39,20 @@ namespace VegoCityManagment.ModuleManagment.Domain
             }
         }
 
-        public void NavigateToOrdersPage(NavOptions options = NavOptions.GetFromBackStack)
+        public void NavigateToOrdersPage(
+            DrawerController drawerController = null,
+            NavOptions options = NavOptions.GetFromBackStack
+            )
         {
             if (options == NavOptions.None)
-                CurrentPage = new OrdersPage();
+                CurrentPage = new OrdersPage(drawerController);
             else
             {
                 var page = BackStack.LastOrDefault(p => p is OrdersPage);
 
                 if (page is null)
                 {
-                    page = new OrdersPage();
+                    page = new OrdersPage(drawerController);
                     BackStack.Add(page);
                 }
                 else
