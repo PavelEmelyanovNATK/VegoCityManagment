@@ -79,26 +79,81 @@
 
                     <StackPanel
                         Grid.Column="0">
-                        <TextBlock Text="Статус:"/>
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <TextBlock Text="Статус:"
+                                       VerticalAlignment="Center"/>
+
+                            <Decorator Width="40"/>
+
+                            <Button 
+                                Content="Сбросить"
+                                Style="{StaticResource WhiteButton12px}"/>
+                        </StackPanel>
 
                         <ItemsControl
+                            Style="{StaticResource CategoriesItemsPanel}"
                             />
                     </StackPanel>
 
                     <StackPanel
                         Grid.Column="1">
-                        <TextBlock Text="Промежуток времени:"/>
 
-                        <ItemsControl
-                            />
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <TextBlock Text="Промежуток времени:"/>
+
+                            <Decorator Width="10"/>
+
+                            <CheckBox x:Name="DateFilterCB"/>
+                        </StackPanel>
+
+
+                        <StackPanel
+                            Orientation="Horizontal">
+
+                            <GroupBox
+                                Header="Начало"
+                                Style="{StaticResource TransparentGroupBox}">
+                                <DatePicker Name="StartDateDP">
+                                    <DatePicker.Style>
+                                        <Style TargetType="DatePicker">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=DateFilterCB, Path=IsChecked}" Value="false">
+                                                    <Setter Property="IsEnabled" Value="false"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DatePicker.Style>
+                                </DatePicker>
+                            </GroupBox>
+
+                            <GroupBox
+                                Header="Конец"
+                                Style="{StaticResource TransparentGroupBox}">
+                                <DatePicker Name="EndDateDP">
+                                    <DatePicker.Style>
+                                        <Style TargetType="DatePicker">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=DateFilterCB, Path=IsChecked}" Value="false">
+                                                    <Setter Property="IsEnabled" Value="false"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DatePicker.Style>
+                                </DatePicker>
+                            </GroupBox>
+                        </StackPanel>
+
                     </StackPanel>
 
                     <StackPanel
                         Grid.Column="3">
                         <TextBlock Text="Поиск по клиенту:"/>
 
-                        <ItemsControl
-                            />
+                        <TextBox
+                            Style="{StaticResource RoundedTextBox}"
+                            Margin="0,10"/>
                     </StackPanel>
                 </Grid>
             </Grid>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVVMBaseByNH.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,20 @@ namespace VegoCityManagment.ModuleManagment.ModuleOrders.Domain
                 RegistrationDate = DateTime.Now,
                 ClientName = "Client",
                 Status = "Status"
+            }
+        };
+
+        private StatusLVItem[] _statuses = new[]
+        {
+            new StatusLVItem
+            {
+                Id = 1,
+                IsChecked = true,
+                Title="1",
+                OnClick = new Command(_ =>
+                {
+
+                })
             }
         };
 

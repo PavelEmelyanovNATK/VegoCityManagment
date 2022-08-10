@@ -1197,7 +1197,7 @@
 
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition x:Name="FirstCell" Width="*"/>
+                                    <ColumnDefinition x:Name="FirstCell" Width="150"/>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition x:Name="SecondCell" Width="*"/>
                                     <ColumnDefinition Width="auto"/>
@@ -1219,24 +1219,32 @@
                                     HorizontalAlignment="Center" VerticalAlignment="Stretch" />
 
                                 <TextBlock
+                                    x:Name="DateCell"
                                     Margin="5,2"
                                     Grid.Column="0"
-                                    Text="Дата поступления"/>
+                                    Text="Дата поступления"
+                                    Cursor="Hand"/>
 
                                 <TextBlock
+                                    x:Name="IdCell"
                                     Margin="5,2"
                                     Grid.Column="2"
-                                    Text="Номер"/>
+                                    Text="Номер"
+                                    Cursor="Hand"/>
 
                                 <TextBlock
+                                    x:Name="ClientCell"
                                     Margin="5,2"
                                     Grid.Column="4"
-                                    Text="Клиент"/>
+                                    Text="Клиент"
+                                    Cursor="Hand"/>
 
                                 <TextBlock
+                                    x:Name="StatusCell"
                                     Margin="5,2"
                                     Grid.Column="6"
-                                    Text="Статус"/>
+                                    Text="Статус"
+                                    Cursor="Hand"/>
                             </Grid>
                             
                             <ScrollViewer Grid.Row="1" Focusable="false" Padding="{TemplateBinding Padding}">
@@ -1245,17 +1253,21 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Background}"/>
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Border}"/>
+                        <Trigger Property="IsMouseOver" SourceName="DateCell" Value="True">
+                            <Setter Property="Background" TargetName="DateCell" Value="#E0FFE8"/>
                         </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsGrouping" Value="true"/>
-                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
-                        </MultiTrigger>
+
+                        <Trigger Property="IsMouseOver" SourceName="IdCell" Value="True">
+                            <Setter Property="Background" TargetName="IdCell" Value="#E0FFE8"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" SourceName="ClientCell" Value="True">
+                            <Setter Property="Background" TargetName="ClientCell" Value="#E0FFE8"/>
+                        </Trigger>
+
+                        <Trigger Property="IsMouseOver" SourceName="StatusCell" Value="True">
+                            <Setter Property="Background" TargetName="StatusCell" Value="#E0FFE8"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -1263,7 +1275,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Border x:Name="Bg" CornerRadius="5" Padding="0, 4">
+                    <Border x:Name="Bg" CornerRadius="5" Padding="0, 4" Cursor="Hand">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="{Binding ElementName=FirstCell, Path=Width, Mode=TwoWay}"/>
@@ -1275,7 +1287,7 @@
                             <TextBlock
                             Margin="5,2"
                             Grid.Column="0"
-                            Text="{Binding RegistrationDate}"/>
+                            Text="{Binding RegistrationDate, StringFormat='dd.MM.yy  HH:mm'}"/>
 
                             <TextBlock
                             Margin="5,2"
